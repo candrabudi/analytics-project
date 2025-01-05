@@ -22,10 +22,10 @@ class DatabaseRawController extends Controller
 
         if($request->is_delete == 1) {
     
-            $existingData = DataRaw::whereDate('updated_at', $request->date)->exists();
+            $existingData = DataRaw::where('upload_date', $request->date)->exists();
     
             if ($existingData) {
-                DataRaw::whereDate('upload_date', $request->date)->delete();
+                DataRaw::where('upload_date', $request->date)->delete();
             }
         }
 
