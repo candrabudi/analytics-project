@@ -81,15 +81,11 @@ class DatabaseRawController extends Controller
         $endDate = $request->input('enddate');
         
         $query = DataRaw::where('account_name', 'LIKE', '%' . $search . '%');
-        
-        // Apply date filtering
         if ($startDate && $endDate) {
             if ($endDate != "undefined") {
-                // Filter by date range
                 $query->whereDate('upload_date', '>=', $startDate)
                       ->whereDate('upload_date', '<=', $endDate);
                 
-                // Perform aggregation and group by account_name, campaign_name
                 $results = $query->select(
                         'account_name',
                         'campaign_name',
@@ -113,10 +109,10 @@ class DatabaseRawController extends Controller
                     ->orderBy('account_name', 'asc')
                     ->get();
             }else{
-                $results = $query->orderBy('upload_date', 'desc')->get();
+                $results = $query->where('upload_date', $startDate)
+                ->orderBy('upload_date', 'desc')->get();
             }
         } else {
-            // If no start and end dates are provided, just fetch the data without aggregation
             $results = $query->where('upload_date', $startDate)
                 ->orderBy('upload_date', 'desc')->get();
         }
