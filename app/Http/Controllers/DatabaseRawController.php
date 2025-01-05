@@ -117,7 +117,8 @@ class DatabaseRawController extends Controller
             }
         } else {
             // If no start and end dates are provided, just fetch the data without aggregation
-            $results = $query->orderBy('upload_date', 'desc')->get();
+            $results = $query->where('upload_date', $startDate)
+                ->orderBy('upload_date', 'desc')->get();
         }
         
         return response()->json($results);
