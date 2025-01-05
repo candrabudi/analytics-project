@@ -200,7 +200,7 @@
                                 method: 'GET',
                                 headers: {
                                     'x-rapidapi-host': 'tiktok-download-video1.p.rapidapi.com',
-                                    'x-rapidapi-key': {{ $setting->rapid_api_key }}
+                                    'x-rapidapi-key': '{{ $setting->rapid_api_key }}'
                                 }
                             });
 
@@ -223,7 +223,7 @@
                                         method: 'GET',
                                         headers: {
                                             'x-rapidapi-host': 'tiktok-download-video1.p.rapidapi.com',
-                                            'x-rapidapi-key': {{ $setting->rapid_api_key }}
+                                            'x-rapidapi-key': '{{ $setting->rapid_api_key }}'
                                         }
                                     })
                                     .then(response => response.json())
@@ -232,7 +232,7 @@
                                                 method: 'GET',
                                                 headers: {
                                                     'x-rapidapi-host': 'tiktok-download-video1.p.rapidapi.com',
-                                                    'x-rapidapi-key': {{ $setting->rapid_api_key }}
+                                                    'x-rapidapi-key': '{{ $setting->rapid_api_key }}'
                                                 }
                                             })
                                             .then(response => response.json())
