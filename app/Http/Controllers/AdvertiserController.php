@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\DataRaw;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -141,11 +142,148 @@ class AdvertiserController extends Controller
             ->groupBy('upload_date')
             ->orderBy('upload_date')
             ->get();
-    
+
         return response()->json($data);
     }
+
+    public function getDataScaleUp(Request $request)
+    {
+        $dates = [
+            Carbon::now()->subDays(4)->format('Y-m-d'),
+            Carbon::now()->subDays(3)->format('Y-m-d'),
+            Carbon::now()->subDays(2)->format('Y-m-d'),
+            Carbon::now()->subDays(1)->format('Y-m-d'),
+        ];
+
+        $searchTerm = $request->input('search');
+        $page = $request->input('page', 1);
+
+        $query = DB::table('data_raws')
+            ->select(
+                'account_name',
+                'campaign_name',
+                DB::raw('AVG(cost_per_add_of_payment_info) as average_cost'),
+                DB::raw('SUM(adds_of_payment_info) as total_adds'),
+                DB::raw('SUM(amount_spent_idr) as spending'),
+                DB::raw('COUNT(adds_of_payment_info) as count_adds_of_payment_info')
+            )
+            ->whereIn('upload_date', $dates)
+            ->when($searchTerm, function ($query) use ($searchTerm) {
+                return $query->where('account_name', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('campaign_name', 'like', '%' . $searchTerm . '%');
+            })
+            ->groupBy('account_name', 'campaign_name')
+            ->havingRaw('AVG(cost_per_add_of_payment_info) < 30000')
+            ->get();
+
+        if ($query->isEmpty()) {
+            return response()->json([
+                'data' => [],
+                'current_page' => $page,
+                'total_pages' => 0,
+                'total_items' => 0,
+            ]);
+        }
+
+        $query = $query->map(function ($item) {
+            $item->formatted_average_cost = 'Rp ' . number_format($item->average_cost, 0, ',', '.');
+            $item->spending = 'Rp ' . number_format($item->spending, 0, ',', '.');
+
+            return $item;
+        });
+
+        $perPage = 10;
+        $currentPageData = $query->forPage($page, $perPage);
+        $totalPages = ceil($query->count() / $perPage);
+
+        return response()->json([
+            'data' => $currentPageData->values(),
+            'current_page' => $page,
+            'total_pages' => $totalPages,
+            'total_items' => $query->count(),
+        ]);
+    }
     
+    
+    public function getDataScaleDown(Request $request)
+    {
+        $dates = [
+            Carbon::now()->subDays(4)->format('Y-m-d'),
+            Carbon::now()->subDays(3)->format('Y-m-d'),
+            Carbon::now()->subDays(2)->format('Y-m-d'),
+            Carbon::now()->subDays(1)->format('Y-m-d'),
+        ];
 
+        $searchTerm = $request->input('search');
+        $page = $request->input('page', 1);
 
+        $query = DB::table('data_raws')
+            ->select(
+                'account_name',
+                'campaign_name',
+                DB::raw('AVG(cost_per_add_of_payment_info) as average_cost'),
+                DB::raw('SUM(adds_of_payment_info) as total_adds'),
+                DB::raw('SUM(amount_spent_idr) as spending'),
+                DB::raw('COUNT(adds_of_payment_info) as count_adds_of_payment_info')
+            )
+            ->whereIn('upload_date', $dates)
+            ->when($searchTerm, function ($query) use ($searchTerm) {
+                return $query->where('account_name', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('campaign_name', 'like', '%' . $searchTerm . '%');
+            })
+            ->groupBy('account_name', 'campaign_name')
+            ->havingRaw('AVG(cost_per_add_of_payment_info) > 30000')
+            ->get();
+
+        if ($query->isEmpty()) {
+            return response()->json([
+                'data' => [],
+                'current_page' => $page,
+                'total_pages' => 0,
+                'total_items' => 0,
+            ]);
+        }
+
+        $query = $query->map(function ($item) {
+            $item->formatted_average_cost = 'Rp ' . number_format($item->average_cost, 0, ',', '.');
+            $item->spending = 'Rp ' . number_format($item->spending, 0, ',', '.');
+
+            return $item;
+        });
+
+        $perPage = 10;
+        $currentPageData = $query->forPage($page, $perPage);
+        $totalPages = ceil($query->count() / $perPage);
+
+        return response()->json([
+            'data' => $currentPageData->values(),
+            'current_page' => $page,
+            'total_pages' => $totalPages,
+            'total_items' => $query->count(),
+        ]);
+    }
+
+    public function getDataCampaign(Request $request)
+    {
+        $page = $request->input('page', 1);
+        $perPage = $request->input('perPage', 10);
+        $search = $request->input('search', '');
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
+    
+        $products = DataRaw::when($search, function ($query) use ($search) {
+                if ($search != "undefined") {
+                    $query->where('account_name', 'LIKE', "%$search%")
+                        ->orWhere('campaign_name', 'LIKE', "%$search%");
+                }
+            })
+            ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('upload_date', [$startDate, $endDate]);
+            })
+            ->paginate($perPage, ['*'], 'page', $page);
+    
+        return response()->json($products);
+    }
+    
 
 }

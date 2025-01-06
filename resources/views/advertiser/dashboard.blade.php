@@ -138,12 +138,12 @@
                                 <div class="avatar avatar-lg bg-orange-transparent border border-orange border-opacity-10">
                                     <i class="ri-pulse-line"
                                         style="
-                                                                    font-size: 22.5px;
-                                                                    background: linear-gradient(90deg, #FF5722 0%, #FF9800 100%);
-                                                                    -webkit-background-clip: text;
-                                                                    -webkit-text-fill-color: transparent;
-                                                                    display: inline-block;
-                                                                ">
+                                        font-size: 22.5px;
+                                        background: linear-gradient(90deg, #FF5722 0%, #FF9800 100%);
+                                        -webkit-background-clip: text;
+                                        -webkit-text-fill-color: transparent;
+                                        display: inline-block;
+                                    ">
                                     </i>
                                 </div>
                             </div>
@@ -155,7 +155,7 @@
     </div>
 
     <div class="row">
-        <div class="col-xl-9">
+        <div class="col-xl-12">
             <div class="card custom-card overflow-hidden sales-statistics-card">
                 <div class="card-header justify-content-between">
                     <div class="card-title">
@@ -178,21 +178,227 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-3">
+    </div>
+
+    <div class="row">
+        <div class="col-xl-6">
             <div class="card custom-card">
                 <div class="card-header">
                     <div class="card-title">
-                        SCALE UP / SCALE DOWN ADS
+                        SCALE UP ADS
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="row mt-0">
-                        
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table id="data-table-scaleup" class="table text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nama Akun</th>
+                                    <th scope="col">Nama Campaign</th>
+                                    <th scope="col">CPR</th>
+                                    <th scope="col">Result</th>
+                                </tr>
+                            </thead>
+                            <tbody id="data-table-body-scaleup">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer border-top-0">
+                    <div class="d-flex align-items-center">
+                        {{-- <div> Showing 6 Entries <i class="bi bi-arrow-right ms-2 fw-semibold"></i> </div> --}}
+                        <div class="ms-auto">
+                            <nav aria-label="Page navigation" class="pagination-style-4">
+                                <ul class="pagination mb-0" id="pagination-scaleup">
+
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="card custom-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        SCALE DOWN ADS
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table id="data-table-scaledown" class="table text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nama Akun</th>
+                                    <th scope="col">Nama Campaign</th>
+                                    <th scope="col">CPR</th>
+                                    <th scope="col">Result</th>
+                                </tr>
+                            </thead>
+                            <tbody id="data-table-body-scaledown">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer border-top-0">
+                    <div class="d-flex align-items-center">
+                        {{-- <div> Showing 6 Entries <i class="bi bi-arrow-right ms-2 fw-semibold"></i> </div> --}}
+                        <div class="ms-auto">
+                            <nav aria-label="Page navigation" class="pagination-style-4">
+                                <ul class="pagination mb-0" id="pagination-scaledown">
+
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card custom-card">
+                <div class="card-header justify-content-between">
+                    <div class="card-title">
+                        CAMPAIGN ANALYTICS
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <div>
+                            <input class="form-control form-control-sm" id="searchInput" type="text"
+                                placeholder="Search Here" aria-label=".form-control-sm example">
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-text text-muted"> <i class="ri-calendar-line"></i> </div>
+                                <input type="text" class="form-control flatpickr-input" id="daterangeCampaign"
+                                    placeholder="Date range picker" readonly="readonly">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nama Akun</th>
+                                    <th scope="col">Nama Campaign</th>
+                                    <th scope="col">Spending</th>
+                                    <th scope="col">Result</th>
+                                    <th scope="col">Cost Per Result</th>
+                                    <th scope="col">CTA WA</th>
+                                    <th scope="col">CTA Shopee</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-campaign">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex align-items-center">
+                        <div id="paginationInfo"> Showing Entries </div>
+                        <div class="ms-auto">
+                            <nav aria-label="Page navigation" class="pagination-style-4">
+                                <ul class="pagination mb-0" id="paginationTableCampaign">
+
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/4.3.0/apexcharts.min.js"
+        integrity="sha512-QgLS4OmTNBq9TujITTSh0jrZxZ55CFjs4wjK8NXsBoZb04UYl8wWQJNaS8jRiLq6/c60bEfOj3cPsxadHICNfw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    @include('advertiser.scripts.scaleup')
+    @include('advertiser.scripts.scaledown')
+
+    <script>
+        const today = new Date();
+        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        const endOfMonth = today;
+        const formattedStartOfMonth = startOfMonth.toISOString().split('T')[0];
+        const formattedEndOfMonth = endOfMonth.toISOString().split('T')[0];
+
+        flatpickr("#daterangeCampaign", {
+            mode: "range",
+            defaultDate: [formattedStartOfMonth, formattedEndOfMonth],
+            dateFormat: "Y-m-d"
+        });
+
+        function loadDataCampaign(page = 1) {
+            const search = $('#searchInput').val();
+            const dateRange = $('#daterangeCampaign').val();
+            const [startDate, endDate] = dateRange ? dateRange.split(' to ') : [formattedStartOfMonth, formattedEndOfMonth];
+            const url =
+                `/advertiser/dashboard/data-campaign?page=${page}&search=${search}&startDate=${startDate}&endDate=${endDate}`;
+
+            $.get(url, function(data) {
+                let rows = '';
+                if (data.data && data.data.length > 0) {
+                    data.data.forEach(function(data_raw) {
+                        rows += `
+                        <tr>
+                            <td>${data_raw.account_name || '-'}</td>
+                            <td>${data_raw.campaign_name || '-'}</td>
+                            <td>${data_raw.amount_spent_idr || '-'}</td>
+                            <td>${data_raw.adds_of_payment_info || '-'}</td>
+                            <td>${data_raw.cost_per_add_of_payment_info || '-'}</td>
+                            <td>${data_raw.leads || '-'}</td>
+                            <td>${data_raw.donations || '-'}</td>
+                        </tr>`;
+                    });
+                } else {
+                    rows = `<tr><td colspan="7" class="text-center">No data found</td></tr>`;
+                }
+
+
+                $('#table-campaign').html(rows);
+                const paginationTableCampaign = (data.links || []).map(link => {
+                    let pageNumber = link.url ? new URL(link.url).searchParams.get('page') : 1;
+                    return `<li class="page-item ${link.active ? 'active' : ''}">
+                        <a class="page-link" href="javascript:void(0);" onclick="loadDataCampaign(${pageNumber})">${link.label}</a>
+                    </li>`;
+                }).join('');
+                $('#paginationTableCampaign').html(paginationTableCampaign);
+                $('#paginationInfo').html(
+                    `Showing ${data.from || 0} to ${data.to || 0} of ${data.total || 0} entries`);
+            }).fail(function() {
+                $('#table-campaign').html('<tr><td colspan="7" class="text-center">Error loading data</td></tr>');
+                $('#paginationTableCampaign').html('');
+            });
+        }
+
+        loadDataCampaign();
+
+        $('#searchInput').on('input', function() {
+            loadDataCampaign(1);
+        });
+
+        $('#daterangeCampaign').on('change', function() {
+            loadDataCampaign(1);
+        });
+    </script>
+
+
 
     <script>
         fetch('{{ route('advertiser.dashboard.data_card') }}')
@@ -275,36 +481,25 @@
                 console.error('There was a problem with the fetch operation:', error);
             });
     </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/4.3.0/apexcharts.min.js"
-        integrity="sha512-QgLS4OmTNBq9TujITTSh0jrZxZ55CFjs4wjK8NXsBoZb04UYl8wWQJNaS8jRiLq6/c60bEfOj3cPsxadHICNfw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-        // Ambil data dari API
         fetch('/advertiser/dashboard/chart-one') // Endpoint API Anda
             .then(response => response.json())
             .then(data => {
-                // Proses data API untuk mengisi grafik
-                const dates = data.map(item => new Date(item.upload_date).getTime()); // Convert to timestamp for x-axis
-                const salesData = data.map(item => item.total_spent); // Data total_spent (dalam ribuan)
-                const refundsData = data.map(item => item.total_cost); // Data total_cost (dalam ribuan)
+                const dates = data.map(item => new Date(item.upload_date).getTime());
+                const salesData = data.map(item => item.total_spent);
+                const refundsData = data.map(item => item.total_cost);
 
-                // Definisikan opsi untuk grafik ApexCharts
                 var options = {
                     series: [{
                         name: "Sales",
                         type: "area",
                         data: dates.map((date, index) => [date, salesData[
-                        index]]), // Map dates and sales data
+                            index]]), // Map dates and sales data
                     }, {
                         name: "Refunds",
                         type: "area",
                         data: dates.map((date, index) => [date, refundsData[
-                        index]]), // Map dates and refunds data
+                            index]]), // Map dates and refunds data
                     }],
                     chart: {
                         height: 220,
@@ -410,130 +605,137 @@
     </script>
 
 
-<script>
-    // Ambil data dari API
-    fetch('/advertiser/dashboard/chart-one') // Endpoint API Anda
-      .then(response => response.json())
-      .then(data => {
-        // Proses data API untuk mengisi grafik
-        const dates = data.map(item => new Date(item.upload_date).toLocaleDateString('en-GB')); // Format tanggal
-        const spentData = data.map(item => item.total_spent); // Data total_spent (dalam ribuan)
-        const costData = data.map(item => item.total_cost); // Data total_cost (dalam ribuan)
-        const impressionsData = data.map(item => item.total_impressions); // Data total_impressions (dalam ribuan)
-        const donationsData = data.map(item => item.total_donations !== null ? item.total_donations : 0); // Data total_donations (0 jika null)
-  
-        // Definisikan opsi untuk grafik ApexCharts
-        var options2 = {
-          series: [{
-            name: 'Total Spent',
-            data: spentData,
-          }, {
-            name: 'Total Cost',
-            data: costData,
-          }, {
-            name: 'Impressions',
-            data: impressionsData,
-          }, {
-            name: 'Donations',
-            data: donationsData,
-          }],
-          chart: {
-            height: 280,
-            type: 'line',
-            toolbar: {
-              show: false,
-            },
-            background: 'none',
-            fill: "#fff",
-            dropShadow: {
-              enabled: true,
-              top: 7,
-              left: 0,
-              blur: 1,
-              color: ["var(--primary-color)", "rgb(12, 215, 177)", "rgb(215, 124, 247)", "rgb(255, 99, 132)"],
-              opacity: 0.05,
-            },
-          },
-          grid: {
-            borderColor: '#f1f1f1',
-            strokeDashArray: 3
-          },
-          colors: ["var(--primary-color)", "rgb(12, 215, 177)", "rgb(215, 124, 247)", "rgb(255, 99, 132)"],
-          background: 'transparent',
-          dataLabels: {
-            enabled: false
-          },
-          stroke: {
-            curve: 'smooth',
-            width: 2,
-          },
-          legend: {
-            show: true,
-            position: 'top',
-            offsetY: 30,
-          },
-          xaxis: {
-            categories: dates,
-            show: false,
-          },
-          yaxis: {
-            axisBorder: {
-              show: false,
-            },
-            axisTicks: {
-              show: false,
-            },
-            labels: {
-              formatter: function(value) {
-                if (value >= 1000) {
-                  return (value / 1000).toFixed(2) + 'RB';
-                } else if (value >= 1000000) {
-                  return (value / 1000000).toFixed(2) + 'JT';
-                }
-                return value.toFixed(2);
-              }
-            },
-          },
-          tooltip: {
-            y: [{
-              formatter: function(e) {
-                if (e >= 1000000) {
-                  return "Rp " + (e / 1000000).toFixed(0) + " JT";
-                } else if (e >= 1000) {
-                  return "Rp " + (e / 1000).toFixed(0) + " RB";
-                }
-                return "Rp " + e.toFixed(0);
-              }
-            }, {
-              formatter: function(e) {
-                if (e >= 1000000) {
-                  return "Rp " + (e / 1000000).toFixed(0) + " JT";
-                } else if (e >= 1000) {
-                  return "Rp " + (e / 1000).toFixed(0) + " RB";
-                }
-                return "Rp " + e.toFixed(0);
-              }
-            }, {
-              formatter: function(e) {
-                if (e >= 1000000) {
-                  return "Rp " + (e / 1000000).toFixed(0) + " JT";
-                } else if (e >= 1000) {
-                  return "Rp " + (e / 1000).toFixed(0) + " RB";
-                }
-                return "Rp " + e.toFixed(0);
-              }
-            }, {
-              formatter: function(e) {
-                return e !== null ? e : '0';
-              }
-            }],
-            theme: "dark",
-          }
-        };
-  
-        var chart4 = new ApexCharts(document.querySelector("#sales-statistics1"), options2);
-        chart4.render();
-      })
-      .catch(error => console.error("Error fetching data: ", error));
-  </script>
+    <script>
+        // Ambil data dari API
+        fetch('/advertiser/dashboard/chart-one') // Endpoint API Anda
+            .then(response => response.json())
+            .then(data => {
+                // Proses data API untuk mengisi grafik
+                const dates = data.map(item => new Date(item.upload_date).toLocaleDateString(
+                    'en-GB')); // Format tanggal
+                const spentData = data.map(item => item.total_spent); // Data total_spent (dalam ribuan)
+                const costData = data.map(item => item.total_cost); // Data total_cost (dalam ribuan)
+                const impressionsData = data.map(item => item
+                    .total_impressions); // Data total_impressions (dalam ribuan)
+                const donationsData = data.map(item => item.total_donations !== null ? item.total_donations :
+                    0); // Data total_donations (0 jika null)
+
+                // Definisikan opsi untuk grafik ApexCharts
+                var options2 = {
+                    series: [{
+                        name: 'Total Spent',
+                        data: spentData,
+                    }, {
+                        name: 'Total Cost',
+                        data: costData,
+                    }, {
+                        name: 'Impressions',
+                        data: impressionsData,
+                    }, {
+                        name: 'Donations',
+                        data: donationsData,
+                    }],
+                    chart: {
+                        height: 280,
+                        type: 'line',
+                        toolbar: {
+                            show: false,
+                        },
+                        background: 'none',
+                        fill: "#fff",
+                        dropShadow: {
+                            enabled: true,
+                            top: 7,
+                            left: 0,
+                            blur: 1,
+                            color: ["var(--primary-color)", "rgb(12, 215, 177)", "rgb(215, 124, 247)",
+                                "rgb(255, 99, 132)"
+                            ],
+                            opacity: 0.05,
+                        },
+                    },
+                    grid: {
+                        borderColor: '#f1f1f1',
+                        strokeDashArray: 3
+                    },
+                    colors: ["var(--primary-color)", "rgb(12, 215, 177)", "rgb(215, 124, 247)",
+                        "rgb(255, 99, 132)"
+                    ],
+                    background: 'transparent',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        curve: 'smooth',
+                        width: 2,
+                    },
+                    legend: {
+                        show: true,
+                        position: 'top',
+                        offsetY: 30,
+                    },
+                    xaxis: {
+                        categories: dates,
+                        show: false,
+                    },
+                    yaxis: {
+                        axisBorder: {
+                            show: false,
+                        },
+                        axisTicks: {
+                            show: false,
+                        },
+                        labels: {
+                            formatter: function(value) {
+                                if (value >= 1000) {
+                                    return (value / 1000).toFixed(2) + 'RB';
+                                } else if (value >= 1000000) {
+                                    return (value / 1000000).toFixed(2) + 'JT';
+                                }
+                                return value.toFixed(2);
+                            }
+                        },
+                    },
+                    tooltip: {
+                        y: [{
+                            formatter: function(e) {
+                                if (e >= 1000000) {
+                                    return "Rp " + (e / 1000000).toFixed(0) + " JT";
+                                } else if (e >= 1000) {
+                                    return "Rp " + (e / 1000).toFixed(0) + " RB";
+                                }
+                                return "Rp " + e.toFixed(0);
+                            }
+                        }, {
+                            formatter: function(e) {
+                                if (e >= 1000000) {
+                                    return "Rp " + (e / 1000000).toFixed(0) + " JT";
+                                } else if (e >= 1000) {
+                                    return "Rp " + (e / 1000).toFixed(0) + " RB";
+                                }
+                                return "Rp " + e.toFixed(0);
+                            }
+                        }, {
+                            formatter: function(e) {
+                                if (e >= 1000000) {
+                                    return "Rp " + (e / 1000000).toFixed(0) + " JT";
+                                } else if (e >= 1000) {
+                                    return "Rp " + (e / 1000).toFixed(0) + " RB";
+                                }
+                                return "Rp " + e.toFixed(0);
+                            }
+                        }, {
+                            formatter: function(e) {
+                                return e !== null ? e : '0';
+                            }
+                        }],
+                        theme: "dark",
+                    }
+                };
+
+                var chart4 = new ApexCharts(document.querySelector("#sales-statistics1"), options2);
+                chart4.render();
+            })
+            .catch(error => console.error("Error fetching data: ", error));
+    </script>
 @endsection

@@ -14,221 +14,180 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-text text-muted"> <i class="ri-calendar-line"></i> </div>
-                                <input type="text" class="form-control flatpickr-input" id="daterange"
+                                <input type="text" class="form-control flatpickr-input" id="daterangeDataRaw"
                                     placeholder="Date range picker" readonly="readonly">
                             </div>
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#fullScreenModal">
-                                View Fullscreen
-                            </button>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-body p-0">
-                    <!-- Table Container with Horizontal Scroll -->
-                    <div class="table-responsive" style="max-height: 800px; overflow-x: auto;">
-                        <table class="table table-bordered table-hover table-striped" id="excelTable">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Akun Iklan</th> <!-- account_name -->
-                                    <th scope="col">Nama Campaign</th>
-                                    <th scope="col">Campaign Budget</th>
-                                    <th scope="col">Amount Spent Idr</th> <!-- amount_spent_idr -->
-                                    <th scope="col">Adds of Payment Info</th> <!-- adds_of_payment_info -->
-                                    <th scope="col">Cost Per Add of Payment Info</th>
-                                    <!-- cost_per_add_of_payment_info -->
-                                    <th scope="col">Leads</th> <!-- leads -->
-                                    <th scope="col">Cost Per Lead</th> <!-- cost_per_lead -->
-                                    <th scope="col">Donations</th> <!-- donations -->
-                                    <th scope="col">Reach</th> <!-- reach -->
-                                    <th scope="col">Impressions</th> <!-- impressions -->
-                                    <th scope="col">CPM</th> <!-- cpm -->
-                                    <th scope="col">Link Clicks</th> <!-- link_clicks -->
-                                    <th scope="col">CPC</th> <!-- cpc -->
-                                    <th scope="col">Purchases</th> <!-- purchases -->
-                                    <th scope="col">Cost Per Purchase</th> <!-- cost_per_purchase -->
-                                    <th scope="col">Adds to Cart</th> <!-- adds_to_cart -->
-                                    <th scope="col">Cost Per Add to Cart</th> <!-- cost_per_add_to_cart -->
-                                    <th scope="col">Reporting Starts</th> <!-- reporting_starts -->
-                                    <th scope="col">Reporting Ends</th> <!-- reporting_ends -->
-                                </tr>
-
-                            </thead>
-                            <tbody id="tableBody">
-
-                            </tbody>
-                        </table>
+                    <div class="table-responsive" style="max-height: 700px; overflow-x: auto;">
+                        <div class="handsontable-container" id="example1"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Fullscreen Modal -->
-    <div class="modal fade" id="fullScreenModal" tabindex="-1" aria-labelledby="fullScreenModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-fullscreen">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="fullScreenModalLabel">DATABASE RAW LIST</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Table Container with Horizontal Scroll -->
-                    <div class="table-responsive" style="max-height: 100%; overflow-x: auto;">
-                        <table class="table table-bordered table-hover table-striped" id="excelTable">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Akun Iklan</th> <!-- account_name -->
-                                    <th scope="col">Nama Campaign</th>
-                                    <th scope="col">Campaign Budget</th>
-                                    <th scope="col">Amount Spent Idr</th> <!-- amount_spent_idr -->
-                                    <th scope="col">Adds of Payment Info</th> <!-- adds_of_payment_info -->
-                                    <th scope="col">Cost Per Add of Payment Info</th>
-                                    <!-- cost_per_add_of_payment_info -->
-                                    <th scope="col">Leads</th> <!-- leads -->
-                                    <th scope="col">Cost Per Lead</th> <!-- cost_per_lead -->
-                                    <th scope="col">Donations</th> <!-- donations -->
-                                    <th scope="col">Reach</th> <!-- reach -->
-                                    <th scope="col">Impressions</th> <!-- impressions -->
-                                    <th scope="col">CPM</th> <!-- cpm -->
-                                    <th scope="col">Link Clicks</th> <!-- link_clicks -->
-                                    <th scope="col">CPC</th> <!-- cpc -->
-                                    <th scope="col">Purchases</th> <!-- purchases -->
-                                    <th scope="col">Cost Per Purchase</th> <!-- cost_per_purchase -->
-                                    <th scope="col">Adds to Cart</th> <!-- adds_to_cart -->
-                                    <th scope="col">Cost Per Add to Cart</th> <!-- cost_per_add_to_cart -->
-                                    <th scope="col">Reporting Starts</th> <!-- reporting_starts -->
-                                    <th scope="col">Reporting Ends</th> <!-- reporting_ends -->
-                                </tr>
-                            </thead>
-                            <tbody id="tableBody2">
-                                <!-- Dynamic data rows will be injected here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- jQuery & AJAX for dynamic data loading -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            const today = new Date();
-            const startOfMonth = today.toISOString().split('T')[0];
-            const endOfMonth = today.toISOString().split('T')[0];
-
-            // Initialize date range picker
-            flatpickr("#daterange", {
-                mode: "range",
-                defaultDate: [startOfMonth, endOfMonth],
-                dateFormat: "Y-m-d"
-            });
-
-            // Load all data without pagination (spreadsheet-like)
-            function loadData() {
-                const search = $('#searchInput').val();
-                const dateRange = $('#daterange').val();
-                const [startdate, enddate] = dateRange ? dateRange.split(' to ') : ['', ''];
-
-                const params = new URLSearchParams({
-                    search,
-                    startdate,
-                    enddate
-                }).toString();
-
-                const url = `/database-raw/list/load?${params}`;
-
-                $.get(url, function(data) {
-                    let rows = '';
-                    let rowNum = 1;
-                    data.forEach(function(video) {
-                        rows += `
-                <tr>
-                    <td>${rowNum++}</td>
-                    <td>${video.account_name || 'No Data'}</td>
-                    <td>${video.campaign_name || 'No Data'}</td>
-                    <td>${video.campaign_budget || 'No Data'}</td>
-                    <td>${video.amount_spent_idr || 'No Data'}</td>
-                    <td>${video.adds_of_payment_info || 'No Data'}</td>
-                    <td>${video.cost_per_add_of_payment_info || 'No Data'}</td>
-                    <td>${video.leads || 'No Data'}</td>
-                    <td>${video.cost_per_lead || 'No Data'}</td>
-                    <td>${video.donations || 'No Data'}</td>
-                    <td>${video.reach || 'No Data'}</td>
-                    <td>${video.impressions || 'No Data'}</td>
-                    <td>${video.cpm || 'No Data'}</td>
-                    <td>${video.link_clicks || 'No Data'}</td>
-                    <td>${video.cpc || 'No Data'}</td>
-                    <td>${video.purchases || 'No Data'}</td>
-                    <td>${video.cost_per_purchase || 'No Data'}</td>
-                    <td>${video.adds_to_cart || 'No Data'}</td>
-                    <td>${video.cost_per_add_to_cart || 'No Data'}</td>
-                    <td>${video.reporting_starts || 'No Data'}</td>
-                    <td>${video.reporting_ends || 'No Data'}</td>
-                </tr>
-                `;
-                    });
-
-                    $('#tableBody').html(rows);
-                    $('#tableBody2').html(rows);
-                });
-            }
-
-            // Trigger load data on search or date range change
-            $('#searchInput, #daterange').on('change', function() {
-                loadData();
-            });
-
-            // Load data when the modal is shown
-            $('#fullScreenModal').on('shown.bs.modal', function() {
-                loadData(); // Load the data when the modal is shown
-            });
-
-            // Initial load
-            loadData();
-        });
-    </script>
-
-    <!-- Custom CSS to style like Excel -->
     <style>
-        /* Custom CSS for fullscreen modal */
-        .modal-fullscreen {
-            max-width: 100%;
-            height: 100%;
-            margin: 0;
-        }
-
-        .modal-body {
-            height: 100%;
-            overflow-y: auto;
-        }
-
-        /* Table like spreadsheet */
-        #excelTable {
-            white-space: nowrap;
-        }
-
-        #excelTable th,
-        #excelTable td {
-            border: 1px solid #dee2e6;
-            /* Border similar to spreadsheet cells */
-            padding: 8px;
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        /* Responsive table with horizontal scroll */
-        .table-responsive {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
+        thead th {
+            padding: 20px;
         }
     </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/handsontable@11.1.0/dist/handsontable.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable@11.1.0/dist/handsontable.full.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"
+        integrity="sha512-K/oyQtMXpxI4+K0W7H25UopjM8pzq0yrVdFdG21Fh5dBe91I40pDd9A4lzNlHPHBIP2cwZuoxaUSX0GJSObvGA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        const container = document.getElementById('example1');
+
+        const hotDataRaw = new Handsontable(container, {
+            colHeaders: ['Account Name', 'Campaign Name', 'Campaign Budget', 'Amount Spent (IDR)',
+                'Adds of Payment Info', 'Cost per Add of Payment Info', 'Leads', 'Cost per Lead', 'Donations',
+                'Reach', 'Impressions', 'CPM', 'Link Clicks', 'CPC', 'Purchases', 'Cost per Purchase',
+                'Adds to Cart', 'Cost per Add to Cart', 'Reporting Starts', 'Reporting Ends'
+            ],
+            rowHeaders: true,
+            stretchH: 'all',
+            height: 700,
+            width: '100%',
+            manualColumnResize: true,
+            licenseKey: 'non-commercial-and-evaluation',
+            columnSorting: true, 
+            columns: [{
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                },
+                {
+                    readOnly: true
+                }
+            ]
+
+        });
+
+        const todayRaw = new Date();
+        const startOfMonthRaw = todayRaw.toISOString().split('T')[0];
+        const endOfMonthRaw = todayRaw.toISOString().split('T')[0];
+        flatpickr("#daterangeDataRaw", {
+            mode: "range",
+            defaultDate: [startOfMonthRaw, endOfMonthRaw],
+            dateFormat: "Y-m-d"
+        });
+
+        function loadDataRaw() {
+            const search = $('#searchInputDataRaw').val();
+            const dateRange = $('#daterangeDataRaw').val();
+            const [startdate, enddate] = dateRange ? dateRange.split(' to ') : ['', ''];
+
+            const params = new URLSearchParams({
+                search,
+                startdate,
+                enddate
+            }).toString();
+
+            const url = `/database-raw/list/load?${params}`;
+
+            $.get(url, function(data) {
+                if (data.length === 0) {
+                    const hotData = [
+                        []
+                    ];
+                    hotDataRaw.loadData(null);
+                } else {
+                    const hotData = data.map((video, index) => [
+                        video.account_name || 'No Data',
+                        video.campaign_name || 'No Data',
+                        video.campaign_budget || 'No Data',
+                        video.amount_spent_idr || 'No Data',
+                        video.adds_of_payment_info || 'No Data',
+                        video.cost_per_add_of_payment_info || 'No Data',
+                        video.leads || 'No Data',
+                        video.cost_per_lead || 'No Data',
+                        video.donations || 'No Data',
+                        video.reach || 'No Data',
+                        video.impressions || 'No Data',
+                        video.cpm || 'No Data',
+                        video.link_clicks || 'No Data',
+                        video.cpc || 'No Data',
+                        video.purchases || 'No Data',
+                        video.cost_per_purchase || 'No Data',
+                        video.adds_to_cart || 'No Data',
+                        video.cost_per_add_to_cart || 'No Data',
+                        video.reporting_starts || 'No Data',
+                        video.reporting_ends || 'No Data'
+                    ]);
+                    hotDataRaw.loadData(hotData);
+                }
+            });
+        }
+
+        $('#searchInputDataRaw, #daterangeDataRaw').on('change', function() {
+            loadDataRaw();
+        });
+
+        $('#fullScreenModalDataRaw').on('shown.bs.modal', function() {
+            loadDataRaw();
+        });
+
+        loadDataRaw();
+    </script>
 @endsection

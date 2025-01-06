@@ -77,48 +77,59 @@ class DatabaseRawController extends Controller
     public function loadDatabaseRaw(Request $request)
     {
         $search = $request->input('search', '');
-        $startDate = $request->input('startdate');
-        $endDate = $request->input('enddate');
-        
-        $query = DataRaw::where('account_name', 'LIKE', '%' . $search . '%');
-        if ($startDate && $endDate) {
-            if ($endDate != "undefined") {
-                $query->whereDate('upload_date', '>=', $startDate)
-                      ->whereDate('upload_date', '<=', $endDate);
-                
-                $results = $query->select(
-                        'account_name',
-                        'campaign_name',
-                        DB::raw('SUM(campaign_budget) as total_campaign_budget'),
-                        DB::raw('SUM(amount_spent_idr) as amount_spent_idr'),
-                        DB::raw('AVG(cost_per_add_of_payment_info) as cost_per_add_of_payment_info'),
-                        DB::raw('SUM(leads) as leads'),
-                        DB::raw('AVG(cost_per_lead) as cost_per_lead'),
-                        DB::raw('SUM(donations) as donations'),
-                        DB::raw('SUM(reach) as reach'),
-                        DB::raw('SUM(impressions) as impressions'),
-                        DB::raw('AVG(cpm) as cpm'),
-                        DB::raw('SUM(link_clicks) as link_clicks'),
-                        DB::raw('AVG(cpc) as cpc'),
-                        DB::raw('SUM(purchases) as purchases'),
-                        DB::raw('AVG(cost_per_purchase) as cost_per_purchase'),
-                        DB::raw('SUM(adds_to_cart) as adds_to_cart'),
-                        DB::raw('AVG(cost_per_add_to_cart) as cost_per_add_to_cart')
-                    )
-                    ->groupBy('account_name', 'campaign_name')
-                    ->orderBy('account_name', 'asc')
-                    ->get();
-            }else{
-                $results = $query->where('upload_date', $startDate)
-                ->orderBy('upload_date', 'desc')->get();
+    
+        $today = now()->toDateString();
+    
+        $startOfMonth = now()->startOfMonth()->toDateString();
+    
+        $startDate = $request->input('startdate', $startOfMonth);
+        $endDate = $request->input('enddate', $today);
+    
+        $query = DataRaw::query();
+
+        if ($search !== '') {
+            if($search != 'undefined') {
+                $query->where('account_name', 'LIKE', '%' . $search . '%');
             }
-        } else {
-            $results = $query->where('upload_date', $startDate)
-                ->orderBy('upload_date', 'desc')->get();
         }
-        
+
+    
+
+        if ($startDate && !$endDate || $endDate == "undefined") {
+            $query->whereDate('upload_date', '=', $startDate);
+    
+        } else if ($startDate && $endDate) {
+            $query->whereDate('upload_date', '>=', $startDate)
+                  ->whereDate('upload_date', '<=', $endDate);
+        }
+    
+        $results = $query->select(
+                'account_name',
+                'campaign_name',
+                DB::raw('SUM(campaign_budget) as total_campaign_budget'),
+                DB::raw('SUM(amount_spent_idr) as amount_spent_idr'),
+                DB::raw('AVG(cost_per_add_of_payment_info) as cost_per_add_of_payment_info'),
+                DB::raw('SUM(leads) as leads'),
+                DB::raw('AVG(cost_per_lead) as cost_per_lead'),
+                DB::raw('SUM(donations) as donations'),
+                DB::raw('SUM(reach) as reach'),
+                DB::raw('SUM(impressions) as impressions'),
+                DB::raw('AVG(cpm) as cpm'),
+                DB::raw('SUM(link_clicks) as link_clicks'),
+                DB::raw('AVG(cpc) as cpc'),
+                DB::raw('SUM(purchases) as purchases'),
+                DB::raw('AVG(cost_per_purchase) as cost_per_purchase'),
+                DB::raw('SUM(adds_to_cart) as adds_to_cart'),
+                DB::raw('AVG(cost_per_add_to_cart) as cost_per_add_to_cart')
+            )
+            ->groupBy('account_name', 'campaign_name')
+            ->orderBy('account_name', 'asc')
+            ->get();
+    
+        // Mengembalikan hasil sebagai JSON response
         return response()->json($results);
     }
+    
     
     
     

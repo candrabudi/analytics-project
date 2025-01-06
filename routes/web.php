@@ -38,6 +38,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/advertiser/dashboard', [AdvertiserController::class, 'dashboard'])->name('advertiser.dashboard');
     Route::get('/advertiser/dashboard/data-card', [AdvertiserController::class, 'getCardData'])->name('advertiser.dashboard.data_card');
     Route::get('/advertiser/dashboard/chart-one', [AdvertiserController::class, 'getChartDataOne'])->name('advertiser.dashboard.getChartDataOne');
+    Route::get('/advertiser/dashboard/data-scale-up', [AdvertiserController::class, 'getDataScaleUp'])->name('advertiser.dashboard.getDataScaleUp');
+    Route::get('/advertiser/dashboard/data-scale-down', [AdvertiserController::class, 'getDataScaleDown'])->name('advertiser.dashboard.getDataScaleDown');
+    Route::get('/advertiser/dashboard/data-campaign', [AdvertiserController::class, 'getDataCampaign'])->name('advertiser.dashboard.getDataCampaign');
 
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/users/edit/{id}', [UserController::class, 'edit']);
