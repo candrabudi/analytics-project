@@ -41,7 +41,7 @@
                         Informasi Data Scrape
                     </span>
                     <p class="mb-0">
-                        <div id="loading-message" style="display: none;">Sedang memproses data...</div>
+                    <div id="loading-message" style="display: none;">Sedang memproses data...</div>
                     </p>
                 </div>
 
@@ -192,6 +192,7 @@
 
             async function fetchTikTokData() {
                 const perPage = 3;
+                const processedAuthorIds = new Set(); // Store processed author IDs
 
                 while (hasMore && !isAborted) {
                     try {
@@ -219,6 +220,13 @@
                             document.getElementById('requests-total').textContent = requestsHandled;
 
                             data.data.videos.forEach(video => {
+                                // Check if author ID has already been processed
+                                if (processedAuthorIds.has(video.author.id)) {
+                                    return; // Skip if author ID is already processed
+                                }
+
+                                processedAuthorIds.add(video.author.id); // Mark this author as processed
+
                                 fetch(`https://tiktok-download-video1.p.rapidapi.com/userInfo?user_id=${video.author.id}`, {
                                         method: 'GET',
                                         headers: {
@@ -239,66 +247,80 @@
                                             .then(publishedVideosData => {
                                                 if (publishedVideosData.code === 0 && publishedVideosData
                                                     .data && publishedVideosData.data.videos) {
-                                                    const totalPlayCount = publishedVideosData.data.videos
-                                                        .reduce((sum, video) => {
+                                                    // Get the latest 12 videos or fewer
+                                                    const videosToConsider = publishedVideosData.data.videos
+                                                        .slice(0, 12);
+                                                    const totalVideos = videosToConsider.length;
+
+                                                    if (totalVideos > 0) {
+                                                        // Calculate the average play count
+                                                        const averagePlayCount = videosToConsider.reduce((
+                                                            sum, video) => {
                                                             return sum + (video.play_count || 0);
-                                                        }, 0);
+                                                        }, 0) / totalVideos;
 
-                                                    const existingAuthor = userInfoArray.find(userInfo =>
-                                                        userInfo.author_id === video.author.id);
-                                                    if (!existingAuthor) {
-                                                        userInfoArray.push({
-                                                            author_id: video.author.id,
-                                                            unique_id: userInfoData.data.user
-                                                                .uniqueId,
-                                                            nickname: userInfoData.data.user
-                                                                .nickname,
-                                                            follower: userInfoData.data.stats
-                                                                .followerCount,
-                                                            total_video: userInfoData.data.stats
-                                                                .videoCount,
-                                                            average: totalPlayCount
-                                                        });
+                                                        const existingAuthor = userInfoArray.find(
+                                                            userInfo =>
+                                                            userInfo.author_id === video.author.id);
+                                                        if (!existingAuthor) {
+                                                            const roundedAveragePlayCount = parseFloat(
+                                                                averagePlayCount.toFixed(2));
 
-                                                        fetch(`/scrape-username/insert/account`, {
-                                                            method: 'POST',
-                                                            headers: {
-                                                                'Content-Type': 'application/json',
-                                                                'X-CSRF-TOKEN': document
-                                                                    .querySelector(
-                                                                        'meta[name="csrf-token"]')
-                                                                    .getAttribute(
-                                                                        'content')
-                                                            },
-                                                            body: JSON.stringify({
-                                                                tiktok_search_id: searchId,
+                                                            userInfoArray.push({
+                                                                author_id: video.author.id,
+                                                                unique_id: userInfoData.data.user
+                                                                    .uniqueId,
+                                                                nickname: userInfoData.data.user
+                                                                    .nickname,
+                                                                follower: userInfoData.data.stats
+                                                                    .followerCount,
+                                                                total_video: userInfoData.data.stats
+                                                                    .videoCount,
+                                                                average: roundedAveragePlayCount // Store the rounded average
+                                                            });
+
+
+                                                            fetch(`/scrape-username/insert/account`, {
+                                                                method: 'POST',
+                                                                headers: {
+                                                                    'Content-Type': 'application/json',
+                                                                    'X-CSRF-TOKEN': document
+                                                                        .querySelector(
+                                                                            'meta[name="csrf-token"]'
+                                                                        ).getAttribute(
+                                                                            'content')
+                                                                },
+                                                                body: JSON.stringify({
+                                                                    tiktok_search_id: searchId,
+                                                                    author_id: video.author
+                                                                        .id,
+                                                                    unique_id: userInfoData
+                                                                        .data.user.uniqueId,
+                                                                    nickname: userInfoData
+                                                                        .data.user.nickname,
+                                                                    follower: userInfoData
+                                                                        .data.stats
+                                                                        .followerCount,
+                                                                    total_video: userInfoData
+                                                                        .data.stats
+                                                                        .videoCount,
+                                                                    average: roundedAveragePlayCount // Send the average play count
+                                                                })
+                                                            });
+
+                                                            renderUserInfoTable([{
                                                                 author_id: video.author.id,
                                                                 unique_id: userInfoData.data
                                                                     .user.uniqueId,
-                                                                nickname: userInfoData.data
-                                                                    .user.nickname,
+                                                                nickname: userInfoData.data.user
+                                                                    .nickname,
                                                                 follower: userInfoData.data
-                                                                    .stats
-                                                                    .followerCount,
-                                                                total_video: userInfoData
-                                                                    .data.stats
-                                                                    .videoCount,
-                                                                average: totalPlayCount
-                                                            })
-                                                        });
-
-                                                        renderUserInfoTable([{
-                                                            author_id: video.author.id,
-                                                            unique_id: userInfoData.data.user
-                                                                .uniqueId,
-                                                            nickname: userInfoData.data.user
-                                                                .nickname,
-                                                            follower: userInfoData.data.stats
-                                                                .followerCount,
-                                                            total_video: userInfoData.data.stats
-                                                                .videoCount,
-                                                            average: totalPlayCount
-                                                        }]);
+                                                                    .stats.followerCount,
+                                                                total_video: userInfoData.data
+                                                                    .stats.videoCount,
+                                                                average: roundedAveragePlayCount
+                                                            }]);
+                                                        }
                                                     }
                                                 }
                                             })
@@ -333,6 +355,7 @@
                     }
                 }
             }
+
 
 
             function renderUserInfoTable(userInfoArray) {
