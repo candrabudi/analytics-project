@@ -35,87 +35,93 @@
                     </a>
                 </li>
 
+                @if (Auth::user()->role == 'admin' || Auth::user()->role == 'kol')
+                    <li class="slide__category"><span class="category-name">KOL & Affiliate</span></li>
+                    <li class="slide has-sub open">
+                        <a href="javascript:void(0);" class="side-menu__item">
+                            <i class="side-menu__icon ri-id-card-line"></i>
+                            <span class="side-menu__label">Scrape Username</span>
+                            <i class="ri-arrow-down-s-line side-menu__angle"></i>
+                        </a>
+                        <ul class="slide-menu child1"
+                            style="position: relative; left: 0px; top: 0px; margin: 0px; transform: translate(10px, 1093px); display: block; box-sizing: border-box;"
+                            data-popper-placement="bottom" data-popper-escaped="">
+                            <li class="slide">
+                                <a href="/scrape-username/search" class="side-menu__item">Cari Data</a>
+                            </li>
+                            <li class="slide">
+                                <a href="/scrape-username/history" class="side-menu__item">History Scrap</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="slide">
+                        <a href="/scrap-engagement" class="side-menu__item">
+                            <i class="side-menu__icon ri-bubble-chart-line"></i>
+                            <span class="side-menu__label">Scrape Engagement</span>
+                        </a>
+                    </li>
+                @endif
 
-                <li class="slide__category"><span class="category-name">KOL & Affiliate</span></li>
-                <li class="slide has-sub open">
-                    <a href="javascript:void(0);" class="side-menu__item">
-                        <i class="side-menu__icon ri-id-card-line"></i>
-                        <span class="side-menu__label">Scrape Username</span>
-                        <i class="ri-arrow-down-s-line side-menu__angle"></i>
-                    </a>
-                    <ul class="slide-menu child1"
-                        style="position: relative; left: 0px; top: 0px; margin: 0px; transform: translate(10px, 1093px); display: block; box-sizing: border-box;"
-                        data-popper-placement="bottom" data-popper-escaped="">
-                        <li class="slide">
-                            <a href="/scrape-username/search" class="side-menu__item">Cari Data</a>
-                        </li>
-                        <li class="slide">
-                            <a href="/scrape-username/history" class="side-menu__item">History Scrap</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="slide">
-                    <a href="/scrap-engagement" class="side-menu__item">
-                        <i class="side-menu__icon ri-bubble-chart-line"></i>
-                        <span class="side-menu__label">Scrape Engagement</span>
-                    </a>
-                </li>
+
+                @if (Auth::user()->role == 'admin' || Auth::user()->role == 'advertiser')
+                    <li class="slide__category"><span class="category-name">Advertiser</span></li>
+                    <li class="slide">
+                        <a href="{{ route('advertiser.dashboard') }}" class="side-menu__item">
+                            <i class="side-menu__icon ri-meta-line"></i>
+                            <span class="side-menu__label">Meta Report</span>
+                        </a>
+                    </li>
+
+                    <li class="slide has-sub open">
+                        <a href="javascript:void(0);" class="side-menu__item">
+                            <i class="side-menu__icon ri-speed-up-line"></i>
+                            <span class="side-menu__label">Landingpage</span>
+                            <i class="ri-arrow-down-s-line side-menu__angle"></i>
+                        </a>
+                        <ul class="slide-menu child1"
+                            style="position: relative; left: 0px; top: 0px; margin: 0px; transform: translate(10px, 1093px); display: block; box-sizing: border-box;"
+                            data-popper-placement="bottom" data-popper-escaped="">
+                            <li class="slide">
+                                <a href="{{ route('landingpages.list') }}" class="side-menu__item">Rank</a>
+                            </li>
+                            <li class="slide">
+                                <a href="{{ route('landingpages.performance') }}"
+                                    class="side-menu__item">Performance</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="slide has-sub open">
+                        <a href="javascript:void(0);" class="side-menu__item">
+                            <i class="side-menu__icon ri-database-2-line"></i>
+                            <span class="side-menu__label">Database</span>
+                            <i class="ri-arrow-down-s-line side-menu__angle"></i>
+                        </a>
+                        <ul class="slide-menu child1"
+                            style="position: relative; left: 0px; top: 0px; margin: 0px; transform: translate(10px, 1093px); display: block; box-sizing: border-box;"
+                            data-popper-placement="bottom" data-popper-escaped="">
+                            <li class="slide">
+                                <a href="{{ route('databae_raw.upload') }}" class="side-menu__item">Import Data</a>
+                            </li>
+                            <li class="slide">
+                                <a href="{{ route('databae_raw.list') }}" class="side-menu__item">Data Raw</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
 
 
-                <li class="slide__category"><span class="category-name">Advertiser</span></li>
-                <li class="slide">
-                    <a href="{{ route('advertiser.dashboard') }}" class="side-menu__item">
-                        <i class="side-menu__icon ri-meta-line"></i>
-                        <span class="side-menu__label">Meta Report</span>
-                    </a>
-                </li>
-
-                <li class="slide has-sub open">
-                    <a href="javascript:void(0);" class="side-menu__item">
-                        <i class="side-menu__icon ri-speed-up-line"></i>
-                        <span class="side-menu__label">Landingpage</span>
-                        <i class="ri-arrow-down-s-line side-menu__angle"></i>
-                    </a>
-                    <ul class="slide-menu child1"
-                        style="position: relative; left: 0px; top: 0px; margin: 0px; transform: translate(10px, 1093px); display: block; box-sizing: border-box;"
-                        data-popper-placement="bottom" data-popper-escaped="">
-                        <li class="slide">
-                            <a href="{{ route('landingpages.list') }}" class="side-menu__item">Rank</a>
-                        </li>
-                        <li class="slide">
-                            <a href="{{ route('landingpages.performance') }}" class="side-menu__item">Performance</a>
-                        </li>
-                    </ul>
-                </li>
-                
-                <li class="slide has-sub open">
-                    <a href="javascript:void(0);" class="side-menu__item">
-                        <i class="side-menu__icon ri-database-2-line"></i>
-                        <span class="side-menu__label">Database</span>
-                        <i class="ri-arrow-down-s-line side-menu__angle"></i>
-                    </a>
-                    <ul class="slide-menu child1"
-                        style="position: relative; left: 0px; top: 0px; margin: 0px; transform: translate(10px, 1093px); display: block; box-sizing: border-box;"
-                        data-popper-placement="bottom" data-popper-escaped="">
-                        <li class="slide">
-                            <a href="{{ route('databae_raw.upload') }}" class="side-menu__item">Import Data</a>
-                        </li>
-                        <li class="slide">
-                            <a href="{{ route('databae_raw.list') }}" class="side-menu__item">Data Raw</a>
-                        </li>
-                    </ul>
-                </li>
-                
-
-                <li class="slide__category">
-                    <span class="category-name">Pengaturan</span>
-                </li>
-                <li class="slide">
-                    <a href="/users" class="side-menu__item">
-                        <i class="side-menu__icon ri-group-3-line"></i>
-                        <span class="side-menu__label">Management User</span>
-                    </a>
-                </li>
+                @if (Auth::user()->role == 'admin')
+                    <li class="slide__category">
+                        <span class="category-name">Pengaturan</span>
+                    </li>
+                    <li class="slide">
+                        <a href="/users" class="side-menu__item">
+                            <i class="side-menu__icon ri-group-3-line"></i>
+                            <span class="side-menu__label">Management User</span>
+                        </a>
+                    </li>
+                @endif
 
             </ul>
             <div class="slide-right" id="slide-right">
