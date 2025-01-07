@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DatabaseRawController;
 use App\Http\Controllers\GeneralSettingController;
+use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\ScrapeEngagementController;
 use App\Http\Controllers\ScrapeUsernameController;
 use App\Http\Controllers\UserController;
@@ -77,4 +78,14 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/general-setting', [GeneralSettingController::class, 'index'])->name('general_setting.index');
     Route::post('/settings/createOrUpdate', [GeneralSettingController::class, 'createOrUpdate'])->name('settings.createOrUpdate');
+
+
+    Route::get('/landingpage/list', [LandingpageController::class, 'list'])->name('landingpages.list');
+    Route::get('/landingpage/list/load', [LandingpageController::class, 'loadListLandingpage'])->name('landingpages.list.load');
+    Route::post('/landingpage/list/store', [LandingpageController::class, 'store'])->name('landingpages.list.store');
+    Route::get('/landingpage/list/edit/{a}', [LandingpageController::class, 'edit'])->name('landingpages.list.edit');
+    Route::post('/landingpage/list/update/{a}', [LandingpageController::class, 'update'])->name('landingpages.list.update');
+    Route::post('/landingpage/list/destroy/{a}', [LandingpageController::class, 'destroy'])->name('landingpages.list.destroy');
+
+    Route::get('/landingpage/performance', [LandingpageController::class, 'performance'])->name('landingpages.performance');
 });

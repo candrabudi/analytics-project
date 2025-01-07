@@ -69,13 +69,25 @@
                         <span class="side-menu__label">Meta Report</span>
                     </a>
                 </li>
-                <li class="slide">
+
+                <li class="slide has-sub open">
                     <a href="javascript:void(0);" class="side-menu__item">
                         <i class="side-menu__icon ri-speed-up-line"></i>
-                        <span class="side-menu__label">Perfoma LP</span>
+                        <span class="side-menu__label">Landingpage</span>
+                        <i class="ri-arrow-down-s-line side-menu__angle"></i>
                     </a>
+                    <ul class="slide-menu child1"
+                        style="position: relative; left: 0px; top: 0px; margin: 0px; transform: translate(10px, 1093px); display: block; box-sizing: border-box;"
+                        data-popper-placement="bottom" data-popper-escaped="">
+                        <li class="slide">
+                            <a href="{{ route('landingpages.list') }}" class="side-menu__item">List</a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('landingpages.performance') }}" class="side-menu__item">Performance</a>
+                        </li>
+                    </ul>
                 </li>
-
+                
                 <li class="slide has-sub open">
                     <a href="javascript:void(0);" class="side-menu__item">
                         <i class="side-menu__icon ri-database-2-line"></i>
