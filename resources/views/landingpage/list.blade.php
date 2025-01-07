@@ -5,15 +5,10 @@
         <div>
             <h1 class="page-title fw-medium fs-18 mb-2">Manajemen Landingpage</h1>
         </div>
-        <div>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
-                Tambah Landingpage
-            </button>
-        </div>
     </div>
 
     <div class="row">
-        <div class="col-xl-12">
+        <div class="col-xl-8">
             <div class="card custom-card">
                 <div class="card-header justify-content-between">
                     <div class="card-title">DATA landingpage AKUN</div>
@@ -21,6 +16,12 @@
                         <div>
                             <input class="form-control form-control-sm" id="searchInput" type="text"
                                 placeholder="Search Here" aria-label=".form-control-sm example">
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#createModal">
+                                Tambah Landingpage
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -56,6 +57,32 @@
                 </div>
             </div>
         </div>
+        
+        <div class="col-xl-4">
+            <div class="card custom-card">
+                <div class="card-header justify-content-between">
+                    <div class="card-title">RANK LANDINGPAGE</div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th scope="col">KODE</th>
+                                    <th scope="col">CPC</th>
+                                    <th scope="col">SPEND</th>
+                                    <th scope="col">USED SPEND</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-rank-landingpage">
+                                <!-- Data akan ditambahkan di sini -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     </div>
 
     <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
@@ -140,6 +167,43 @@
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Fetch data ketika halaman dimuat
+        fetchRankLandingpage();
+
+        function fetchRankLandingpage() {
+            $.ajax({
+                url: "{{ route('landingpages.landingpageRank') }}", // Akses route dengan AJAX
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    var tbody = $('#table-rank-landingpage');
+                    tbody.empty(); // Kosongkan tabel sebelum mengisi data baru
+
+                    // Loop melalui data JSON dan tampilkan di tabel
+                    $.each(response, function(index, lp) {
+                        var row = `
+                            <tr>
+                                <td>${lp.code}</td>
+                                <td>${lp.total_performance}</td>
+                                <td>${lp.amount_spent}</td>
+                                <td>${lp.used_spend}%</td>
+                            </tr>
+                        `;
+                        tbody.append(row);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                }
+            });
+        }
+    });
+</script>
+
     <script>
         function loadLandingpages(page = 1) {
             const search = $('#searchInput').val();

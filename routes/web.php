@@ -88,4 +88,5 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/landingpage/list/destroy/{a}', [LandingpageController::class, 'destroy'])->name('landingpages.list.destroy');
 
     Route::get('/landingpage/performance', [LandingpageController::class, 'performance'])->name('landingpages.performance');
+    Route::get('/landingpage/rank', [LandingpageController::class, 'landingpageRank'])->name('landingpages.landingpageRank');
 });

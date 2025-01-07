@@ -145,4 +145,66 @@ class LandingpageController extends Controller
     }
     
 
+    public function landingpageRank(Request $request)
+    {
+        $landingpages = AdvertiserLandingpage::get();
+        $month = $request->input('month', Carbon::now()->month);
+        $year = $request->input('year', Carbon::now()->year);
+    
+        $datas = [];
+        $totalSpent = 0;
+    
+        foreach ($landingpages as $lp) {
+            $totalSpent += DataRaw::where('campaign_name', 'LIKE', '%' . $lp->code . '%')
+                ->whereYear('upload_date', $year)
+                ->whereMonth('upload_date', $month)
+                ->sum('amount_spent_idr');
+        }
+    
+        foreach ($landingpages as $lp) {
+            $performance = DataRaw::where('campaign_name', 'LIKE', '%' . $lp->code . '%')
+                ->whereYear('upload_date', $year)
+                ->whereMonth('upload_date', $month)
+                ->select(
+                    DB::raw('SUM(cost_per_add_of_payment_info) as total_performance'),
+                    DB::raw('SUM(amount_spent_idr) as amount_spent'),
+                    DB::raw('SUM(adds_of_payment_info) as contact')
+                )
+                ->groupBy('campaign_name')
+                ->first();
+    
+            if ($performance) {
+                $usedSpendPercentage = round($performance->amount_spent / $totalSpent * 100, 2);
+    
+                $datas[] = [
+                    'code' => $lp->code,
+                    'link' => $lp->link,
+                    'total_performance' => round($performance->total_performance),
+                    'amount_spent' => round($performance->amount_spent),
+                    'used_spend' => $usedSpendPercentage,
+                ];
+            } else {
+                $datas[] = [
+                    'code' => $lp->code,
+                    'link' => $lp->link,
+                    'total_performance' => 0,
+                    'amount_spent' => 0,
+                    'used_spend' => 0,
+                ];
+            }
+        }
+    
+        usort($datas, function($a, $b) {
+            if ($a['amount_spent'] == 0 && $b['amount_spent'] > 0) {
+                return 1;
+            }
+            if ($b['amount_spent'] == 0 && $a['amount_spent'] > 0) {
+                return -1;
+            }
+            return $a['amount_spent'] <=> $b['amount_spent'];
+        });
+        return $datas;
+    }
+
+
 }
