@@ -80,7 +80,7 @@
                         style="position: relative; left: 0px; top: 0px; margin: 0px; transform: translate(10px, 1093px); display: block; box-sizing: border-box;"
                         data-popper-placement="bottom" data-popper-escaped="">
                         <li class="slide">
-                            <a href="{{ route('landingpages.list') }}" class="side-menu__item">List</a>
+                            <a href="{{ route('landingpages.list') }}" class="side-menu__item">Rank</a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('landingpages.performance') }}" class="side-menu__item">Performance</a>
