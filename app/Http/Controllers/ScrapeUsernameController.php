@@ -10,12 +10,16 @@ use App\Models\GeneralSetting;
 use App\Models\TiktokAccountVideo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class ScrapeUsernameController extends Controller
 {
     public function search()
     {
+        if(Auth::user()->username == "admin") {
+            return view('error.maintenance');
+        }
         $setting = GeneralSetting::first();
         return view('scrape_username.search', compact('setting'));
     }
@@ -122,6 +126,9 @@ class ScrapeUsernameController extends Controller
 
     public function historyScrap()
     {
+        if(Auth::user()->username == "admin") {
+            return view('error.maintenance');
+        }
         return view('scrape_username.history');
     }
 
@@ -149,6 +156,9 @@ class ScrapeUsernameController extends Controller
 
     public function detailHistory($a) 
     {
+        if(Auth::user()->username == "admin") {
+            return view('error.maintenance');
+        }
         $tiktokSearch = TiktokSearch::where('id', $a)
             ->first();
 
@@ -170,6 +180,9 @@ class ScrapeUsernameController extends Controller
     public function account($a)
     {
 
+        if(Auth::user()->username == "admin") {
+            return view('error.maintenance');
+        }
         $tiktokAccount = TiktokAccount::where('author_id', $a)
             ->first();
         return view('scrape_username.account', compact('tiktokAccount'));

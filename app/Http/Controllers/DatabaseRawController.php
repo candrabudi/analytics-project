@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DataRaw;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -13,6 +14,9 @@ class DatabaseRawController extends Controller
 {
     public function upload()
     {
+        if(Auth::user()->username == "admin") {
+            return view('error.maintenance');
+        }
         return view('database_raw.upload');
     }
 

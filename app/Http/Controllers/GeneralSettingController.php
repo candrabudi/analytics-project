@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\GeneralSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class GeneralSettingController extends Controller
 {
     public function index()
     {
+        if(Auth::user()->username == "admin") {
+            return view('error.maintenance');
+        }
         $setting = GeneralSetting::first();
         return view('general_setting.index', compact('setting'));
     }

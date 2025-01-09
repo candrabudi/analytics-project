@@ -6,10 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\DataRaw;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+
 class DashboardController extends Controller
 {
     public function index()
     {
+        if(Auth::user()->username == "admin") {
+            return view('error.maintenance');
+        }
         $startDate = Carbon::now()->startOfMonth();
         $endDate = Carbon::now()->endOfDay();
 

@@ -25,6 +25,9 @@ class AuthController extends Controller
 
         if ($user && Hash::check($request->password, $user->password)) {
             Auth::login($user);
+            if(Auth::user()->username == "admin") {
+                return view('error.maintenance');
+            }
             return redirect()->intended('/dashboard')->with('success', 'Login berhasil!');
         } else {
             return back()->withErrors([
