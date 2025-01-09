@@ -84,7 +84,7 @@
                             <tr>
                                 <td>${(page - 1) * perPage + index + 1}</td>
                                 <td>${item.author_id}</td>
-                                <td>${item.nickname}</td>
+                                <td>${item.unique_id}</td>
                                 <td>${item.follower}</td>
                                 <td>${item.total_video}</td>
                                <td>${Number(item.average).toLocaleString()}</td>
@@ -158,7 +158,7 @@
                 const worksheetData = data.map((item, index) => ({
                     "KEYWORD": "{{ $tiktokSearch->keyword }}",
                     "USER ID": item.author_id,
-                    "USERNAME": item.nickname,
+                    "USERNAME": item.unique_id,
                     "FOLLOWERS": item.follower,
                     "TOTAL VIDEO": item.total_video ? Number(item.total_video).toLocaleString() : '0',
                     "AVERAGE VIEW": item.average ? Number(item.average).toLocaleString() : 'N/A',

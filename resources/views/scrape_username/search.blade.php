@@ -71,6 +71,8 @@
                     <div id="loading-message" style="display: none;">Processing data...</div>
                     <button type="button" id="abort-button" class="btn btn-danger" style="display: none;">Abort
                         Process</button>
+                    <button type="button" id="export-button" class="btn btn-success">Export to CSV</button>
+
                 </div>
 
 
@@ -123,6 +125,14 @@
     @push('scripts')
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
+        <script>
+            document.getElementById('export-button').addEventListener('click', function() {
+                var table = document.querySelector('table');
+                var wb = XLSX.utils.table_to_book(table, {sheet: "Sheet1"});
+                XLSX.writeFile(wb, "data-tabel.xlsx");
+            });
+        </script>
         <script>
             let startTime;
             let intervalId;
@@ -272,11 +282,16 @@
                                                                 category = "micro";
                                                             }
                                                             userInfoArray.push({
-                                                                author_id: videosToConsider[0].author.id,
-                                                                unique_id: userInfoData.data.user.uniqueId,
-                                                                nickname: userInfoData.data.user.nickname,
-                                                                follower: userInfoData.data.stats.followerCount,
-                                                                total_video: userInfoData.data.stats.videoCount,
+                                                                author_id: videosToConsider[0]
+                                                                    .author.id,
+                                                                unique_id: userInfoData.data.user
+                                                                    .uniqueId,
+                                                                nickname: userInfoData.data.user
+                                                                    .nickname,
+                                                                follower: userInfoData.data.stats
+                                                                    .followerCount,
+                                                                total_video: userInfoData.data.stats
+                                                                    .videoCount,
                                                                 average: roundedAveragePlayCount,
                                                                 category: category
                                                             });
@@ -288,26 +303,38 @@
                                                                     'X-CSRF-TOKEN': document
                                                                         .querySelector(
                                                                             'meta[name="csrf-token"]'
-                                                                            ).getAttribute(
+                                                                        ).getAttribute(
                                                                             'content')
                                                                 },
                                                                 body: JSON.stringify({
                                                                     tiktok_search_id: searchId,
-                                                                    author_id: videosToConsider[0].author.id,
-                                                                    unique_id: userInfoData.data.user.uniqueId,
-                                                                    nickname: userInfoData.data.user.nickname,
-                                                                    follower: userInfoData.data.stats.followerCount,
-                                                                    total_video: userInfoData.data.stats.videoCount,
+                                                                    author_id: videosToConsider[
+                                                                        0].author.id,
+                                                                    unique_id: userInfoData
+                                                                        .data.user.uniqueId,
+                                                                    nickname: userInfoData
+                                                                        .data.user.nickname,
+                                                                    follower: userInfoData
+                                                                        .data.stats
+                                                                        .followerCount,
+                                                                    total_video: userInfoData
+                                                                        .data.stats
+                                                                        .videoCount,
                                                                     average: roundedAveragePlayCount
                                                                 })
                                                             });
 
                                                             renderUserInfoTable([{
-                                                                author_id: videosToConsider[0].author.id,
-                                                                unique_id: userInfoData.data.user.uniqueId,
-                                                                nickname: userInfoData.data.user.nickname,
-                                                                follower: userInfoData.data.stats.followerCount,
-                                                                total_video: userInfoData.data.stats.videoCount,
+                                                                author_id: videosToConsider[0]
+                                                                    .author.id,
+                                                                unique_id: userInfoData.data
+                                                                    .user.uniqueId,
+                                                                nickname: userInfoData.data.user
+                                                                    .nickname,
+                                                                follower: userInfoData.data
+                                                                    .stats.followerCount,
+                                                                total_video: userInfoData.data
+                                                                    .stats.videoCount,
                                                                 average: roundedAveragePlayCount,
                                                                 category: category
                                                             }]);
@@ -363,7 +390,7 @@
                         <td>${userInfo.unique_id}</td>
                         <td>${numberFormatter.format(userInfo.follower)}</td>
                         <td>${numberFormatter.format(userInfo.total_video)}</td>
-                        <td>${numberFormatter.format(userInfo.average)}</td>
+                        <td>${numberFormatter.format(userInfo.average)}</td> 
                     `;
                     accountDataBody.appendChild(newRow);
                 });
