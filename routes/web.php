@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DatabaseRawController;
 use App\Http\Controllers\GeneralSettingController;
+use App\Http\Controllers\KOLController;
 use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\ScrapeEngagementController;
 use App\Http\Controllers\ScrapeUsernameController;
@@ -45,7 +46,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/users/edit/{id}', [UserController::class, 'edit']);
-    Route::post('/users/create', [UserController::class, 'store']);
+    Route::post('/users', [UserController::class, 'store']);
     Route::post('/users/update/{id}', [UserController::class, 'update']);
     Route::post('/users/delete/{id}', [UserController::class, 'destroy']);
 
@@ -89,4 +90,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/landingpage/performance', [LandingpageController::class, 'performance'])->name('landingpages.performance');
     Route::get('/landingpage/rank', [LandingpageController::class, 'landingpageRank'])->name('landingpages.landingpageRank');
+
+
+    Route::get('/kol/master', [KOLController::class, 'master'])->name('kol.master');
 });

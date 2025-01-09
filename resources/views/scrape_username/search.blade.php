@@ -96,11 +96,11 @@
                             <thead>
                                 <tr>
                                     <th scope="col">USER ID</th>
-                                    <th scope="col">NAMA</th>
-                                    <th scope="col">username</th>
-                                    <th scope="col">Followers</th>
-                                    <th scope="col">Total Videos</th>
-                                    <th scope="col">Average</th>
+                                    <th scope="col">TIER</th>
+                                    <th scope="col">USERNAME</th>
+                                    <th scope="col">FOLLOWERS</th>
+                                    <th scope="col">TOTAL VIDEOS</th>
+                                    <th scope="col">AVERAGE</th>
                                 </tr>
                             </thead>
                             <tbody id="account-data-body">
@@ -192,7 +192,7 @@
 
             async function fetchTikTokData() {
                 const perPage = 3;
-                const processedAuthorIds = new Set(); // Store processed author IDs
+                const processedAuthorIds = new Set();
 
                 while (hasMore && !isAborted) {
                     try {
@@ -220,12 +220,11 @@
                             document.getElementById('requests-total').textContent = requestsHandled;
 
                             data.data.videos.forEach(video => {
-                                // Check if author ID has already been processed
                                 if (processedAuthorIds.has(video.author.id)) {
-                                    return; // Skip if author ID is already processed
+                                    return;
                                 }
 
-                                processedAuthorIds.add(video.author.id); // Mark this author as processed
+                                processedAuthorIds.add(video.author.id);
 
                                 fetch(`https://tiktok-download-video1.p.rapidapi.com/userInfo?user_id=${video.author.id}`, {
                                         method: 'GET',
@@ -236,7 +235,7 @@
                                     })
                                     .then(response => response.json())
                                     .then(userInfoData => {
-                                        fetch(`https://tiktok-download-video1.p.rapidapi.com/userPublishVideo?user_id=${video.author.id}&count=10&cursor=0`, {
+                                        fetch(`https://tiktok-download-video1.p.rapidapi.com/userPublishVideo?user_id=${video.author.id}&count=12&cursor=0`, {
                                                 method: 'GET',
                                                 headers: {
                                                     'x-rapidapi-host': 'tiktok-download-video1.p.rapidapi.com',
@@ -247,38 +246,40 @@
                                             .then(publishedVideosData => {
                                                 if (publishedVideosData.code === 0 && publishedVideosData
                                                     .data && publishedVideosData.data.videos) {
-                                                    // Get the latest 12 videos or fewer
                                                     const videosToConsider = publishedVideosData.data.videos
                                                         .slice(0, 12);
                                                     const totalVideos = videosToConsider.length;
 
                                                     if (totalVideos > 0) {
-                                                        // Calculate the average play count
                                                         const averagePlayCount = videosToConsider.reduce((
                                                             sum, video) => {
                                                             return sum + (video.play_count || 0);
                                                         }, 0) / totalVideos;
 
                                                         const existingAuthor = userInfoArray.find(
-                                                            userInfo =>
-                                                            userInfo.author_id === video.author.id);
+                                                            userInfo => userInfo.author_id ===
+                                                            videosToConsider[0].author.id);
                                                         if (!existingAuthor) {
                                                             const roundedAveragePlayCount = parseFloat(
                                                                 averagePlayCount.toFixed(2));
+                                                            let category = "-";
 
+                                                            if (userInfoData.data.stats.followerCount <
+                                                                10000) {
+                                                                category = "nano";
+                                                            } else if (userInfoData.data.stats
+                                                                .followerCount >= 10000) {
+                                                                category = "micro";
+                                                            }
                                                             userInfoArray.push({
-                                                                author_id: video.author.id,
-                                                                unique_id: userInfoData.data.user
-                                                                    .uniqueId,
-                                                                nickname: userInfoData.data.user
-                                                                    .nickname,
-                                                                follower: userInfoData.data.stats
-                                                                    .followerCount,
-                                                                total_video: userInfoData.data.stats
-                                                                    .videoCount,
-                                                                average: roundedAveragePlayCount // Store the rounded average
+                                                                author_id: videosToConsider[0].author.id,
+                                                                unique_id: userInfoData.data.user.uniqueId,
+                                                                nickname: userInfoData.data.user.nickname,
+                                                                follower: userInfoData.data.stats.followerCount,
+                                                                total_video: userInfoData.data.stats.videoCount,
+                                                                average: roundedAveragePlayCount,
+                                                                category: category
                                                             });
-
 
                                                             fetch(`/scrape-username/insert/account`, {
                                                                 method: 'POST',
@@ -287,42 +288,33 @@
                                                                     'X-CSRF-TOKEN': document
                                                                         .querySelector(
                                                                             'meta[name="csrf-token"]'
-                                                                        ).getAttribute(
+                                                                            ).getAttribute(
                                                                             'content')
                                                                 },
                                                                 body: JSON.stringify({
                                                                     tiktok_search_id: searchId,
-                                                                    author_id: video.author
-                                                                        .id,
-                                                                    unique_id: userInfoData
-                                                                        .data.user.uniqueId,
-                                                                    nickname: userInfoData
-                                                                        .data.user.nickname,
-                                                                    follower: userInfoData
-                                                                        .data.stats
-                                                                        .followerCount,
-                                                                    total_video: userInfoData
-                                                                        .data.stats
-                                                                        .videoCount,
-                                                                    average: roundedAveragePlayCount // Send the average play count
+                                                                    author_id: videosToConsider[0].author.id,
+                                                                    unique_id: userInfoData.data.user.uniqueId,
+                                                                    nickname: userInfoData.data.user.nickname,
+                                                                    follower: userInfoData.data.stats.followerCount,
+                                                                    total_video: userInfoData.data.stats.videoCount,
+                                                                    average: roundedAveragePlayCount
                                                                 })
                                                             });
 
                                                             renderUserInfoTable([{
-                                                                author_id: video.author.id,
-                                                                unique_id: userInfoData.data
-                                                                    .user.uniqueId,
-                                                                nickname: userInfoData.data.user
-                                                                    .nickname,
-                                                                follower: userInfoData.data
-                                                                    .stats.followerCount,
-                                                                total_video: userInfoData.data
-                                                                    .stats.videoCount,
-                                                                average: roundedAveragePlayCount
+                                                                author_id: videosToConsider[0].author.id,
+                                                                unique_id: userInfoData.data.user.uniqueId,
+                                                                nickname: userInfoData.data.user.nickname,
+                                                                follower: userInfoData.data.stats.followerCount,
+                                                                total_video: userInfoData.data.stats.videoCount,
+                                                                average: roundedAveragePlayCount,
+                                                                category: category
                                                             }]);
                                                         }
                                                     }
                                                 }
+
                                             })
                                             .catch(error => console.error(
                                                 'Error fetching user published videos API:', error));
@@ -364,7 +356,7 @@
                     const newRow = document.createElement('tr');
                     newRow.innerHTML = `
                         <td>${userInfo.author_id}</td>
-                        <td>${userInfo.nickname}</td>
+                        <td>${userInfo.category}</td>
                         <td>${userInfo.unique_id}</td>
                         <td>${userInfo.follower}</td>
                         <td>${userInfo.total_video}</td>

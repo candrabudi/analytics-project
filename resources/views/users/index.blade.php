@@ -48,6 +48,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="createUserForm">
+                        @csrf
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
                             <input type="text" class="form-control" id="username" name="username" required>
@@ -81,6 +82,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="updateUserForm">
+                        @csrf
                         <input type="hidden" id="update-user-id">
                         <div class="mb-3">
                             <label for="update-username" class="form-label">Username</label>
@@ -153,7 +155,7 @@
 
                 var userId = $(this).data('user-id');
                 $.ajax({
-                    url: '/api/users/' + userId,
+                    url: '/users/' + userId,
                     method: 'GET',
                     success: function(response) {
                         $('#update-user-id').val(response.id);
@@ -191,7 +193,7 @@
                 var formData = $(this).serialize();
 
                 $.ajax({
-                    url: '/api/users',
+                    url: '/users',
                     method: 'POST',
                     data: formData,
                     success: function(response) {
@@ -221,7 +223,7 @@
                 var userId = $('#update-user-id').val();
 
                 $.ajax({
-                    url: '/api/users/' + userId,
+                    url: '/users/' + userId,
                     method: 'PUT',
                     data: formData,
                     success: function(response) {
@@ -248,7 +250,7 @@
                 var userId = $('#delete-user-id').val();
 
                 $.ajax({
-                    url: '/api/users/' + userId,
+                    url: '/users/' + userId,
                     method: 'DELETE',
                     success: function(response) {
                         $('#deleteModal').modal('hide');
@@ -275,7 +277,7 @@
                 $('#users-table-body').hide();
 
                 $.ajax({
-                    url: '/api/users',
+                    url: '/users',
                     method: 'GET',
                     success: function(response) {
                         var rows = '';

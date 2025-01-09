@@ -36,7 +36,47 @@
                 </li>
 
                 @if (Auth::user()->role == 'admin' || Auth::user()->role == 'kol')
-                    <li class="slide__category"><span class="category-name">KOL & Affiliate</span></li>
+                    <li class="slide__category"><span class="category-name">KOL</span></li>
+                    <li class="slide">
+                        <a href="/scrap-engagement" class="side-menu__item">
+                            <i class="side-menu__icon ri-bubble-chart-line"></i>
+                            <span class="side-menu__label">Scrape Engagement</span>
+                        </a>
+                    </li>
+                    <li class="slide">
+                        <a href="/scrap-engagement" class="side-menu__item">
+                            <i class="side-menu__icon ri-article-line"></i>
+                            <span class="side-menu__label">KOL Management</span>
+                        </a>
+                    </li>
+                    <li class="slide">
+                        <a href="/scrap-engagement" class="side-menu__item">
+                            <i class="side-menu__icon ri-send-plane-line"></i>
+                            <span class="side-menu__label">KOL Post</span>
+                        </a>
+                    </li>
+                    <li class="slide">
+                        <a href="/scrap-engagement" class="side-menu__item">
+                            <i class="side-menu__icon ri-file-chart-line"></i>
+                            <span class="side-menu__label">Invoice Tiktok</span>
+                        </a>
+                    </li>
+                    <li class="slide">
+                        <a href="/scrap-engagement" class="side-menu__item">
+                            <i class="side-menu__icon ri-pages-line"></i>
+                            <span class="side-menu__label">Tipe Influencer</span>
+                        </a>
+                    </li>
+                    <li class="slide">
+                        <a href="{{ route('kol.master') }}" class="side-menu__item">
+                            <i class="side-menu__icon ri-mastercard-line"></i>
+                            <span class="side-menu__label">KOL Master</span>
+                        </a>
+                    </li>
+                @endif
+                
+                @if (Auth::user()->role == 'admin' || Auth::user()->role == 'affiliate')
+                    <li class="slide__category"><span class="category-name">Affiliate</span></li>
                     <li class="slide has-sub open">
                         <a href="javascript:void(0);" class="side-menu__item">
                             <i class="side-menu__icon ri-id-card-line"></i>
@@ -53,12 +93,6 @@
                                 <a href="/scrape-username/history" class="side-menu__item">History Scrap</a>
                             </li>
                         </ul>
-                    </li>
-                    <li class="slide">
-                        <a href="/scrap-engagement" class="side-menu__item">
-                            <i class="side-menu__icon ri-bubble-chart-line"></i>
-                            <span class="side-menu__label">Scrape Engagement</span>
-                        </a>
                     </li>
                 @endif
 
