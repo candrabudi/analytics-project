@@ -209,7 +209,7 @@
                 while (hasMore && !isAborted) {
                     try {
                         const response = await fetch(
-                            `https://tiktok-download-video1.p.rapidapi.com/feedSearch?keywords=${encodeURIComponent(keyword)}&count=${perPage}&cursor=${cursor}&region=US&publish_time=0&sort_type=0`, {
+                            `https://tiktok-download-video1.p.rapidapi.com/feedSearch?keywords=${encodeURIComponent(keyword)}&count=${perPage}&cursor=${cursor}&region=ID&publish_time=0&sort_type=0`, {
                                 method: 'GET',
                                 headers: {
                                     'x-rapidapi-host': 'tiktok-download-video1.p.rapidapi.com',
