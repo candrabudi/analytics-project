@@ -130,7 +130,9 @@
             document.getElementById('export-button').addEventListener('click', function() {
                 var table = document.querySelector('table');
                 var wb = XLSX.utils.table_to_book(table, {sheet: "Sheet1"});
-                XLSX.writeFile(wb, "data-tabel.xlsx");
+
+                keyword = document.getElementById('keyword-input').value;
+                XLSX.writeFile(wb, "scrap_username_"+ keyword + ".xlsx");
             });
         </script>
         <script>
