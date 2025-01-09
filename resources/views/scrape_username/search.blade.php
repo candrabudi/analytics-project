@@ -352,19 +352,23 @@
 
             function renderUserInfoTable(userInfoArray) {
                 const accountDataBody = document.getElementById('account-data-body');
+
+                const numberFormatter = new Intl.NumberFormat('id-ID');
+
                 userInfoArray.forEach((userInfo, index) => {
                     const newRow = document.createElement('tr');
                     newRow.innerHTML = `
                         <td>${userInfo.author_id}</td>
                         <td>${userInfo.category}</td>
                         <td>${userInfo.unique_id}</td>
-                        <td>${userInfo.follower}</td>
-                        <td>${userInfo.total_video}</td>
-                        <td>${userInfo.average}</td>
+                        <td>${numberFormatter.format(userInfo.follower)}</td>
+                        <td>${numberFormatter.format(userInfo.total_video)}</td>
+                        <td>${numberFormatter.format(userInfo.average)}</td>
                     `;
                     accountDataBody.appendChild(newRow);
                 });
             }
+
 
             function renderPagination() {
                 const paginationContainer = document.getElementById('pagination-container');
