@@ -261,7 +261,7 @@
                                                             videosToConsider[0].author.id);
                                                         if (!existingAuthor) {
                                                             const roundedAveragePlayCount = parseFloat(
-                                                                averagePlayCount.toFixed(2));
+                                                                averagePlayCount.toFixed(0));
                                                             let category = "-";
 
                                                             if (userInfoData.data.stats.followerCount <
