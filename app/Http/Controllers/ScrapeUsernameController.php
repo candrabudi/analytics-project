@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\ProcessTiktokData;
+use App\Models\KolDataRaw;
 use App\Models\TiktokAccount;
 use App\Models\TiktokSearch;
 use App\Models\GeneralSetting;
@@ -101,6 +102,22 @@ class ScrapeUsernameController extends Controller
         $store->total_video = $request->total_video;
         $store->average = $request->average;
         $store->save();
+
+
+        $linkAccount = "https://www.tiktok.com/@".$request->unique_id;
+
+        $sKolData = new KolDataRaw();
+        $sKolData->author_id = $request->author_id;
+        $sKolData->unique_id = $request->unique_id;
+        $sKolData->nickname = $request->nickname;
+        $sKolData->link_account = $linkAccount;
+        $sKolData->following_count = $request->following;
+        $sKolData->follower_count = $request->follower;
+        $sKolData->heart_count = $request->like;
+        $sKolData->digg_count = $request->digg;
+        $sKolData->video_count = $request->total_video;
+        $sKolData->tier = $request->tier;
+        $sKolData->save();
 
         return response()
             ->json([

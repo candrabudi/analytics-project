@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="transparent"
     data-width="default" data-menu-styles="light" data-toggled="close">
@@ -46,10 +45,50 @@
     <script src="{{ asset('assets/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
     <!-- MAIN JS -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
+    <style>
+        .colored-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            min-width: 300px;
+        }
 
+        .toast-body {
+            color: white;
+        }
+
+        .text-fixed-white {
+            color: #fff !important;
+        }
+    </style>
 </head>
 
 <body>
+
+    <!-- Toast untuk sukses -->
+    <div id="solid-successToast" class="toast colored-toast bg-success text-fixed-white fade" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-success text-fixed-white">
+            <img class="bd-placeholder-img rounded me-2"
+                src="https://php.spruko.com/mamix/mamix/assets/images/brand-logos/toggle-dark.png" alt="...">
+            <strong class="me-auto">Mamix</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">Success! Data has been inserted.</div>
+    </div>
+
+    <!-- Toast untuk gagal -->
+    <div id="solid-errorToast" class="toast colored-toast bg-danger text-fixed-white fade" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-danger text-fixed-white">
+            <img class="bd-placeholder-img rounded me-2"
+                src="https://php.spruko.com/mamix/mamix/assets/images/brand-logos/toggle-dark.png" alt="...">
+            <strong class="me-auto">Mamix</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">Error! Failed to insert data.</div>
+    </div>
 
     @include('layouts.components.switcher')
 
@@ -60,8 +99,8 @@
     <div class="page">
         @include('layouts.components.header')
 
-        <div class="modal fade" id="header-responsive-search" tabindex="-1"
-            aria-labelledby="header-responsive-search" aria-hidden="true">
+        <div class="modal fade" id="header-responsive-search" tabindex="-1" aria-labelledby="header-responsive-search"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body">
@@ -89,8 +128,8 @@
             <div class="container">
                 <span class="text-muted"> Copyright © <span id="year"></span> <a href="javascript:void(0);"
                         class="text-dark fw-medium">NoxWhisper</a>.
-                    Designed with <span class="bi bi-heart-fill text-danger"></span> by <a
-                        href="javascript:void(0);" target="_blank">
+                    Designed with <span class="bi bi-heart-fill text-danger"></span> by <a href="javascript:void(0);"
+                        target="_blank">
                         <span class="fw-medium text-primary">Tensan</span>
                     </a> All
                     rights
@@ -132,4 +171,5 @@
     @stack('scripts')
 
 </body>
+
 </html>

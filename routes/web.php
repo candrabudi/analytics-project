@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DatabaseRawController;
 use App\Http\Controllers\GeneralSettingController;
 use App\Http\Controllers\KOLController;
+use App\Http\Controllers\KolMasterController;
 use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\ScrapeEngagementController;
 use App\Http\Controllers\ScrapeUsernameController;
@@ -93,4 +94,9 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('/kol/master', [KOLController::class, 'master'])->name('kol.master');
+    Route::post('/kol/master/store', [KolMasterController::class, 'storeKolMaster'])->name('kol.master.store');
+    Route::get('/kol/master/load-list', [KOLController::class, 'loadListKolMaster'])->name('kol.master.loadListKolMaster');
+
+
+    Route::get('/kol/type-influencer', [KOLController::class, 'typeInfluencer'])->name('kol.type_influencer');
 });

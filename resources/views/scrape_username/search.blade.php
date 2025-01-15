@@ -72,7 +72,9 @@
                     <button type="button" id="abort-button" class="btn btn-danger" style="display: none;">Abort
                         Process</button>
                     <button type="button" id="export-button" class="btn btn-success">Export to CSV</button>
-
+                    <button id="insert-data-btn" class="btn btn-primary" style="display: none;">
+                        Insert Data (<span id="selected-count">0</span>)
+                    </button>
                 </div>
 
 
@@ -97,6 +99,8 @@
                         <table class="table text-nowrap">
                             <thead>
                                 <tr>
+                                    <th scope="col"><input type="checkbox" id="select-all"></th>
+                                    <!-- Checkbox untuk pilih semua -->
                                     <th scope="col">USER ID</th>
                                     <th scope="col">TIER</th>
                                     <th scope="col">USERNAME</th>
@@ -129,10 +133,12 @@
         <script>
             document.getElementById('export-button').addEventListener('click', function() {
                 var table = document.querySelector('table');
-                var wb = XLSX.utils.table_to_book(table, {sheet: "Sheet1"});
+                var wb = XLSX.utils.table_to_book(table, {
+                    sheet: "Sheet1"
+                });
 
                 keyword = document.getElementById('keyword-input').value;
-                XLSX.writeFile(wb, "scrap_username_"+ keyword + ".xlsx");
+                XLSX.writeFile(wb, "scrap_username_" + keyword + ".xlsx");
             });
         </script>
         <script>
@@ -270,79 +276,101 @@
 
                                                         const existingAuthor = userInfoArray.find(
                                                             userInfo => userInfo.author_id ===
-                                                            videosToConsider[0].author.id);
+                                                            videosToConsider[0].author.id
+                                                        );
+
                                                         if (!existingAuthor) {
                                                             const roundedAveragePlayCount = parseFloat(
                                                                 averagePlayCount.toFixed(0));
                                                             let category = "-";
+                                                            const followerCount = userInfoData.data.stats
+                                                                .followerCount;
+                                                            const followingCount = userInfoData.data.stats
+                                                                .followingCount;
+                                                            const videoCount = userInfoData.data.stats
+                                                                .videoCount;
+                                                            const heartCount = userInfoData.data.stats
+                                                                .heartCount;
+                                                            const diggCount = userInfoData.data.stats
+                                                                .diggCount;
 
-                                                            if (userInfoData.data.stats.followerCount <
-                                                                10000) {
-                                                                category = "nano";
-                                                            } else if (userInfoData.data.stats
-                                                                .followerCount >= 10000) {
-                                                                category = "micro";
-                                                            }
-                                                            userInfoArray.push({
-                                                                author_id: videosToConsider[0]
-                                                                    .author.id,
-                                                                unique_id: userInfoData.data.user
-                                                                    .uniqueId,
-                                                                nickname: userInfoData.data.user
-                                                                    .nickname,
-                                                                follower: userInfoData.data.stats
-                                                                    .followerCount,
-                                                                total_video: userInfoData.data.stats
-                                                                    .videoCount,
-                                                                average: roundedAveragePlayCount,
-                                                                category: category
-                                                            });
+                                                            if (followerCount >= 1000) {
+                                                                if (followerCount >= 1000000) {
+                                                                    category = "mega";
+                                                                } else if (followerCount >= 100000) {
+                                                                    category = "macro";
+                                                                } else if (followerCount >= 10000) {
+                                                                    category = "micro";
+                                                                } else if (followerCount >= 1000) {
+                                                                    category = "nano";
+                                                                }
 
-                                                            fetch(`/scrape-username/insert/account`, {
-                                                                method: 'POST',
-                                                                headers: {
-                                                                    'Content-Type': 'application/json',
-                                                                    'X-CSRF-TOKEN': document
-                                                                        .querySelector(
-                                                                            'meta[name="csrf-token"]'
-                                                                        ).getAttribute(
-                                                                            'content')
-                                                                },
-                                                                body: JSON.stringify({
-                                                                    tiktok_search_id: searchId,
+                                                                userInfoArray.push({
+                                                                    author_id: videosToConsider[0]
+                                                                        .author.id,
+                                                                    unique_id: userInfoData.data
+                                                                        .user.uniqueId,
+                                                                    nickname: userInfoData.data.user
+                                                                        .nickname,
+                                                                    follower: followerCount,
+                                                                    total_video: userInfoData.data
+                                                                        .stats.videoCount,
+                                                                    average: roundedAveragePlayCount,
+                                                                    category: category
+                                                                });
+
+                                                                fetch(`/scrape-username/insert/account`, {
+                                                                    method: 'POST',
+                                                                    headers: {
+                                                                        'Content-Type': 'application/json',
+                                                                        'X-CSRF-TOKEN': document
+                                                                            .querySelector(
+                                                                                'meta[name="csrf-token"]'
+                                                                            ).getAttribute(
+                                                                                'content')
+                                                                    },
+
+                                                                    body: JSON.stringify({
+                                                                        tiktok_search_id: searchId,
+                                                                        author_id: videosToConsider[
+                                                                                0].author
+                                                                            .id,
+                                                                        unique_id: userInfoData
+                                                                            .data.user
+                                                                            .uniqueId,
+                                                                        nickname: userInfoData
+                                                                            .data.user
+                                                                            .nickname,
+                                                                        follower: followerCount,
+                                                                        following: followerCount,
+                                                                        total_video: videoCount,
+                                                                        like: heartCount,
+                                                                        average: roundedAveragePlayCount,
+                                                                        digg: diggCount,
+                                                                        tier: category
+                                                                    })
+                                                                });
+
+                                                                renderUserInfoTable([{
                                                                     author_id: videosToConsider[
                                                                         0].author.id,
-                                                                    unique_id: userInfoData
-                                                                        .data.user.uniqueId,
-                                                                    nickname: userInfoData
-                                                                        .data.user.nickname,
-                                                                    follower: userInfoData
-                                                                        .data.stats
-                                                                        .followerCount,
-                                                                    total_video: userInfoData
-                                                                        .data.stats
-                                                                        .videoCount,
-                                                                    average: roundedAveragePlayCount
-                                                                })
-                                                            });
-
-                                                            renderUserInfoTable([{
-                                                                author_id: videosToConsider[0]
-                                                                    .author.id,
-                                                                unique_id: userInfoData.data
-                                                                    .user.uniqueId,
-                                                                nickname: userInfoData.data.user
-                                                                    .nickname,
-                                                                follower: userInfoData.data
-                                                                    .stats.followerCount,
-                                                                total_video: userInfoData.data
-                                                                    .stats.videoCount,
-                                                                average: roundedAveragePlayCount,
-                                                                category: category
-                                                            }]);
+                                                                    unique_id: userInfoData.data
+                                                                        .user.uniqueId,
+                                                                    nickname: userInfoData.data
+                                                                        .user.nickname,
+                                                                    follower: followerCount,
+                                                                    following: followingCount,
+                                                                    like: heartCount,
+                                                                    total_video: videoCount,
+                                                                    digg: diggCount,
+                                                                    average: roundedAveragePlayCount,
+                                                                    category: category
+                                                                }]);
+                                                            }
                                                         }
                                                     }
                                                 }
+
 
                                             })
                                             .catch(error => console.error(
@@ -378,24 +406,109 @@
             }
 
 
+            function showSuccessToast() {
+                const successToast = new bootstrap.Toast(document.getElementById('solid-successToast'));
+                successToast.show();
+            }
+
+            function showErrorToast() {
+                const errorToast = new bootstrap.Toast(document.getElementById('solid-errorToast'));
+                errorToast.show();
+            }
 
             function renderUserInfoTable(userInfoArray) {
                 const accountDataBody = document.getElementById('account-data-body');
-
                 const numberFormatter = new Intl.NumberFormat('id-ID');
 
                 userInfoArray.forEach((userInfo, index) => {
                     const newRow = document.createElement('tr');
                     newRow.innerHTML = `
-                        <td>${userInfo.author_id}</td>
-                        <td>${userInfo.category}</td>
-                        <td>${userInfo.unique_id}</td>
-                        <td>${numberFormatter.format(userInfo.follower)}</td>
-                        <td>${numberFormatter.format(userInfo.total_video)}</td>
-                        <td>${numberFormatter.format(userInfo.average)}</td> 
-                    `;
+            <td><input type="checkbox" class="select-row" data-index="${index}"></td>
+            <td>${userInfo.author_id}</td>
+            <td>${userInfo.category}</td>
+            <td>${userInfo.unique_id}</td>
+            <td>${numberFormatter.format(userInfo.follower)}</td>
+            <td>${numberFormatter.format(userInfo.total_video)}</td>
+            <td>${numberFormatter.format(userInfo.average)}</td>
+        `;
                     accountDataBody.appendChild(newRow);
                 });
+
+                // Tambahkan event listener untuk 'Select All' checkbox
+                const selectAllCheckbox = document.getElementById('select-all');
+                const insertDataButton = document.getElementById('insert-data-btn');
+                const selectedCountSpan = document.getElementById('selected-count');
+
+                // Function untuk menghitung dan menampilkan jumlah data yang dipilih
+                function updateSelectedCount() {
+                    const selectedCheckboxes = document.querySelectorAll('.select-row:checked');
+                    const count = selectedCheckboxes.length;
+
+                    // Jika ada data yang dipilih, tampilkan tombol dan perbarui jumlah
+                    if (count > 0) {
+                        insertDataButton.style.display = 'inline-block'; // Tampilkan tombol
+                        selectedCountSpan.textContent = count; // Perbarui jumlah di tombol
+                    } else {
+                        insertDataButton.style.display = 'none'; // Sembunyikan tombol jika tidak ada yang dipilih
+                    }
+                }
+
+                selectAllCheckbox.addEventListener('change', function() {
+                    const rowCheckboxes = document.querySelectorAll('.select-row');
+                    rowCheckboxes.forEach(checkbox => {
+                        checkbox.checked = selectAllCheckbox.checked;
+                    });
+                    updateSelectedCount();
+                });
+
+                document.getElementById('account-data-body').addEventListener('change', function(event) {
+                    if (event.target.classList.contains('select-row')) {
+                        updateSelectedCount();
+                    }
+                });
+
+                if (!insertDataButton.hasAttribute('listener-added')) {
+                    insertDataButton.setAttribute('listener-added', 'true');
+
+                    insertDataButton.addEventListener('click', function() {
+                        const selectedData = [];
+                        const rowCheckboxes = document.querySelectorAll('.select-row:checked');
+
+                        rowCheckboxes.forEach(checkbox => {
+                            const rowIndex = checkbox.getAttribute('data-index');
+                            const userInfo = userInfoArray[
+                            rowIndex];
+                            selectedData.push(userInfo);
+                        });
+
+                        if (selectedData.length > 0) {
+                            console.log('Data yang dipilih:', selectedData);
+
+                            fetch('/kol/master/store', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                            .getAttribute('content')
+                                    },
+                                    body: JSON.stringify({
+                                        data: selectedData
+                                    }) // Kirim array data yang dipilih
+                                })
+                                .then(response => response.json())
+                                .then(result => {
+                                    console.log('Data berhasil diinsert:', result);
+                                    showSuccessToast(); // Tampilkan toast sukses
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    showErrorToast(); // Tampilkan toast gagal
+                                });
+                        } else {
+                            alert('Tidak ada data yang dipilih.');
+                        }
+                    });
+                }
             }
 
 

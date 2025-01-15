@@ -37,11 +37,22 @@
 
                 @if (Auth::user()->role == 'admin' || Auth::user()->role == 'kol')
                     <li class="slide__category"><span class="category-name">KOL</span></li>
-                    <li class="slide">
-                        <a href="/scrap-engagement" class="side-menu__item">
-                            <i class="side-menu__icon ri-bubble-chart-line"></i>
-                            <span class="side-menu__label">Scrape Engagement</span>
+                    <li class="slide has-sub open">
+                        <a href="javascript:void(0);" class="side-menu__item">
+                            <i class="side-menu__icon ri-id-card-line"></i>
+                            <span class="side-menu__label">Scrape Username</span>
+                            <i class="ri-arrow-down-s-line side-menu__angle"></i>
                         </a>
+                        <ul class="slide-menu child1"
+                            style="position: relative; left: 0px; top: 0px; margin: 0px; transform: translate(10px, 1093px); display: block; box-sizing: border-box;"
+                            data-popper-placement="bottom" data-popper-escaped="">
+                            <li class="slide">
+                                <a href="/scrape-username/search" class="side-menu__item">Cari Data</a>
+                            </li>
+                            <li class="slide">
+                                <a href="/scrape-username/history" class="side-menu__item">History Scrap</a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="slide">
                         <a href="/scrap-engagement" class="side-menu__item">
@@ -62,7 +73,7 @@
                         </a>
                     </li>
                     <li class="slide">
-                        <a href="/scrap-engagement" class="side-menu__item">
+                        <a href="{{ route('kol.type_influencer') }}" class="side-menu__item">
                             <i class="side-menu__icon ri-pages-line"></i>
                             <span class="side-menu__label">Tipe Influencer</span>
                         </a>
@@ -77,22 +88,11 @@
                 
                 @if (Auth::user()->role == 'admin' || Auth::user()->role == 'affiliate')
                     <li class="slide__category"><span class="category-name">Affiliate</span></li>
-                    <li class="slide has-sub open">
-                        <a href="javascript:void(0);" class="side-menu__item">
-                            <i class="side-menu__icon ri-id-card-line"></i>
-                            <span class="side-menu__label">Scrape Username</span>
-                            <i class="ri-arrow-down-s-line side-menu__angle"></i>
+                    <li class="slide">
+                        <a href="/scrap-engagement" class="side-menu__item">
+                            <i class="side-menu__icon ri-bubble-chart-line"></i>
+                            <span class="side-menu__label">Scrape Engagement</span>
                         </a>
-                        <ul class="slide-menu child1"
-                            style="position: relative; left: 0px; top: 0px; margin: 0px; transform: translate(10px, 1093px); display: block; box-sizing: border-box;"
-                            data-popper-placement="bottom" data-popper-escaped="">
-                            <li class="slide">
-                                <a href="/scrape-username/search" class="side-menu__item">Cari Data</a>
-                            </li>
-                            <li class="slide">
-                                <a href="/scrape-username/history" class="side-menu__item">History Scrap</a>
-                            </li>
-                        </ul>
                     </li>
                 @endif
 
