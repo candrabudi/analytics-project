@@ -13,17 +13,22 @@ class KolMasterController extends Controller
         $data = $request->data;
 
         foreach($data as $req) {
-            $store = new RawTiktokAccount();
-            $store->author_id = $req['author_id'];
-            $store->unique_id = $req['unique_id'];
-            $store->nickname = $req['nickname'];
-            $store->follower = $req['follower'];
-            $store->following = $req['following'];
-            $store->like = $req['like'];
-            $store->total_video = $req['total_video'];
-            $store->avg_views = $req['average'];
-            $store->tier = $req['category'];
-            $store->save();
+            $check = RawTiktokAccount::where('author_id', $req['authorID'])
+                ->first();
+
+            if(!$check) {
+                $store = new RawTiktokAccount();
+                $store->author_id = $req['authorID'];
+                $store->unique_id = $req['uniqueID'];
+                $store->nickname = $req['nickname'];
+                $store->follower = $req['follower'];
+                $store->following = $req['following'];
+                $store->like = $req['like'];
+                $store->total_video = $req['totalVideo'];
+                $store->avg_views = $req['average'];
+                $store->tier = $req['category'];
+                $store->save();
+            }
         }
 
         return response()

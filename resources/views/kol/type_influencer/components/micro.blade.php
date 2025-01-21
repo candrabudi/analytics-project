@@ -18,7 +18,6 @@
                                 <tr>
                                     <th class="text-center"><input class="form-check-input" type="checkbox"
                                             id="checkboxNoLabeljob1" value="" aria-label="..."></th>
-                                    <th scope="col">USER ID</th>
                                     <th scope="col">USERNAME</th>
                                     <th scope="col">NAMA</th>
                                     <th scope="col">FOLLOWER</th>

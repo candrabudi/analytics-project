@@ -87,7 +87,7 @@
             <div class="card custom-card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">SCRAPE USERNAME</h5>
-                    <form action="" class="d-flex gap-2 w-100">
+                    <form action="" class="d-flex gap-2 w-100" id="search-form">
                         <input class="form-control form-control-sm" type="text" placeholder="Cari data disini.."
                             aria-label="Cari data" id="keyword-input">
                         <button type="button" id="start-button" class="btn btn-primary">Start Process</button>
@@ -101,7 +101,7 @@
                                 <tr>
                                     <th scope="col"><input type="checkbox" id="select-all"></th>
                                     <!-- Checkbox untuk pilih semua -->
-                                    <th scope="col">USER ID</th>
+                                    {{-- <th scope="col">USER ID</th> --}}
                                     <th scope="col">TIER</th>
                                     <th scope="col">USERNAME</th>
                                     <th scope="col">FOLLOWERS</th>
@@ -130,17 +130,49 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             document.getElementById('export-button').addEventListener('click', function() {
                 var table = document.querySelector('table');
-                var wb = XLSX.utils.table_to_book(table, {
-                    sheet: "Sheet1"
+                var wb = XLSX.utils.book_new();
+        
+                var rows = Array.from(table.querySelectorAll('tbody tr')).map(function(row) {
+                    var cells = Array.from(row.querySelectorAll('td'));
+                    var checkbox = row.querySelector('.select-row');
+                    if (checkbox) {
+                        var authorId = checkbox.getAttribute('data-author-id') || '';
+                        var category = checkbox.getAttribute('data-category') || '';
+                        var uniqueId = checkbox.getAttribute('data-unique-id') || '';
+                        var follower = checkbox.getAttribute('data-follower') || '';
+                        var totalVideo = checkbox.getAttribute('data-total-video') || '';
+                        var average = checkbox.getAttribute('data-average') || '';
+        
+                        return [
+                            authorId,
+                            category,
+                            uniqueId,
+                            follower,
+                            totalVideo,
+                            average
+                        ];
+                    } else {
+                        return ['', '', '', '', '', ''];
+                    }
                 });
-
-                keyword = document.getElementById('keyword-input').value;
+        
+                rows = rows.filter((row, index) => {
+                    return index !== 0 || row.some(cell => cell !== '');
+                });
+        
+                var header = ['USER ID', 'TIER', 'USERNAME', 'FOLLOWERS', 'TOTAL VIDEOS', 'AVERAGE'];
+                var data = [header].concat(rows);
+                var ws = XLSX.utils.aoa_to_sheet(data);
+                XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+                var keyword = document.getElementById('keyword-input').value;
                 XLSX.writeFile(wb, "scrap_username_" + keyword + ".xlsx");
             });
         </script>
+        
         <script>
             let startTime;
             let intervalId;
@@ -416,46 +448,116 @@
                 errorToast.show();
             }
 
+            function getSelectedData(userInfoArray) {
+                const selectedData = [];
+                const rowCheckboxes = document.querySelectorAll('.select-row:checked');
+
+                rowCheckboxes.forEach(checkbox => {
+                    const authorID = checkbox.getAttribute('data-author-id');
+                    const category = checkbox.getAttribute('data-category');
+                    const uniqueID = checkbox.getAttribute('data-unique-id');
+                    const follower = checkbox.getAttribute('data-follower');
+                    const totalVideo = checkbox.getAttribute('data-total-video');
+                    const average = checkbox.getAttribute('data-average');
+                    const nickname = checkbox.getAttribute('data-nickname');
+                    const following = checkbox.getAttribute('data-following');
+                    const like = checkbox.getAttribute('data-like');
+
+                    selectedData.push({
+                        authorID: authorID,
+                        category: category,
+                        uniqueID: uniqueID,
+                        follower: follower,
+                        totalVideo: totalVideo,
+                        average: average,
+                        nickname: nickname,
+                        following: following,
+                        like: like,
+                    });
+                });
+
+                return selectedData;
+            }
+
+
+            function insertSelectedData(selectedData) {
+                if (selectedData.length > 0) {
+                    console.log('Data yang dipilih:', selectedData);
+
+                    fetch('/kol/master/store', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify({
+                                data: selectedData
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(result => {
+                            console.log('Data berhasil diinsert:', result);
+                            showSuccessToast();
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            showErrorToast();
+                        });
+                } else {
+                    alert('Tidak ada data yang dipilih.');
+                }
+            }
+
             function renderUserInfoTable(userInfoArray) {
                 const accountDataBody = document.getElementById('account-data-body');
                 const numberFormatter = new Intl.NumberFormat('id-ID');
 
-                userInfoArray.forEach((userInfo, index) => {
+                userInfoArray.forEach(userInfo => {
                     const newRow = document.createElement('tr');
                     newRow.innerHTML = `
-            <td><input type="checkbox" class="select-row" data-index="${index}"></td>
-            <td>${userInfo.author_id}</td>
-            <td>${userInfo.category}</td>
-            <td>${userInfo.unique_id}</td>
-            <td>${numberFormatter.format(userInfo.follower)}</td>
-            <td>${numberFormatter.format(userInfo.total_video)}</td>
-            <td>${numberFormatter.format(userInfo.average)}</td>
-        `;
+                        <td>
+                            <input type="checkbox" 
+                                class="select-row" 
+                                data-author-id="${userInfo.author_id}" 
+                                data-category="${userInfo.category}" 
+                                data-unique-id="${userInfo.unique_id}"
+                                data-follower="${userInfo.follower}"
+                                data-total-video="${userInfo.total_video}"
+                                data-average="${userInfo.average}"
+                                data-nickname="${userInfo.nickname}"
+                                data-like="${userInfo.like}"
+                                data-following="${userInfo.following}"
+                            >
+                        </td>
+                        <td>${userInfo.category}</td>
+                        <td>${userInfo.unique_id}</td>
+                        <td>${numberFormatter.format(userInfo.follower)}</td>
+                        <td>${numberFormatter.format(userInfo.total_video)}</td>
+                        <td>${numberFormatter.format(userInfo.average)}</td>
+                    `;
                     accountDataBody.appendChild(newRow);
                 });
 
-                // Tambahkan event listener untuk 'Select All' checkbox
                 const selectAllCheckbox = document.getElementById('select-all');
                 const insertDataButton = document.getElementById('insert-data-btn');
                 const selectedCountSpan = document.getElementById('selected-count');
 
-                // Function untuk menghitung dan menampilkan jumlah data yang dipilih
                 function updateSelectedCount() {
                     const selectedCheckboxes = document.querySelectorAll('.select-row:checked');
                     const count = selectedCheckboxes.length;
 
-                    // Jika ada data yang dipilih, tampilkan tombol dan perbarui jumlah
                     if (count > 0) {
-                        insertDataButton.style.display = 'inline-block'; // Tampilkan tombol
-                        selectedCountSpan.textContent = count; // Perbarui jumlah di tombol
+                        insertDataButton.style.display = 'inline-block';
+                        selectedCountSpan.textContent = count;
                     } else {
-                        insertDataButton.style.display = 'none'; // Sembunyikan tombol jika tidak ada yang dipilih
+                        insertDataButton.style.display = 'none';
                     }
                 }
 
                 selectAllCheckbox.addEventListener('change', function() {
                     const rowCheckboxes = document.querySelectorAll('.select-row');
                     rowCheckboxes.forEach(checkbox => {
+                        console.log(checkbox);
                         checkbox.checked = selectAllCheckbox.checked;
                     });
                     updateSelectedCount();
@@ -471,46 +573,29 @@
                     insertDataButton.setAttribute('listener-added', 'true');
 
                     insertDataButton.addEventListener('click', function() {
-                        const selectedData = [];
-                        const rowCheckboxes = document.querySelectorAll('.select-row:checked');
-
-                        rowCheckboxes.forEach(checkbox => {
-                            const rowIndex = checkbox.getAttribute('data-index');
-                            const userInfo = userInfoArray[
-                            rowIndex];
-                            selectedData.push(userInfo);
+                        Swal.fire({
+                            title: 'Apakah kamu yakin?',
+                            text: "Apakah kamu yakin ingin memasukan data ini ke database raw?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Ya, masukan!',
+                            cancelButtonText: 'Batal'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                const selectedData = getSelectedData(userInfoArray);
+                                insertSelectedData(selectedData); // Proceed with data insertion
+                                Swal.fire(
+                                    'Data dimasukan!',
+                                    'Data telah berhasil dimasukan ke database raw.',
+                                    'success'
+                                );
+                            }
                         });
-
-                        if (selectedData.length > 0) {
-                            console.log('Data yang dipilih:', selectedData);
-
-                            fetch('/kol/master/store', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                            .getAttribute('content')
-                                    },
-                                    body: JSON.stringify({
-                                        data: selectedData
-                                    }) // Kirim array data yang dipilih
-                                })
-                                .then(response => response.json())
-                                .then(result => {
-                                    console.log('Data berhasil diinsert:', result);
-                                    showSuccessToast(); // Tampilkan toast sukses
-                                })
-                                .catch(error => {
-                                    console.error('Error:', error);
-                                    showErrorToast(); // Tampilkan toast gagal
-                                });
-                        } else {
-                            alert('Tidak ada data yang dipilih.');
-                        }
                     });
                 }
             }
-
 
             function renderPagination() {
                 const paginationContainer = document.getElementById('pagination-container');
@@ -570,7 +655,21 @@
                 finishProcess();
             }
 
-            document.getElementById('start-button').addEventListener('click', startProcess);
+            document.getElementById('start-button').addEventListener('click', function(event) {
+                event.preventDefault();
+                startProcess();
+            });
+
+            document.getElementById('keyword-input').addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    startProcess();
+                }
+            });
+
+            document.getElementById('search-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+            });
             document.getElementById('abort-button').addEventListener('click', abortProcess);
         </script>
     @endpush

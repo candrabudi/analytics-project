@@ -1,50 +1,48 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="transparent"
     data-width="default" data-menu-styles="light" data-toggled="close">
-<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
 <head>
-
-    <!-- Meta Data -->
     <meta charset="UTF-8">
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>@yield('title') | Tensan</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <!-- FAVICON -->
     <link rel="icon" href="https://php.spruko.com/mamix/mamix/assets/images/brand-logos/favicon.ico"
         type="image/x-icon">
-
-    <!-- BOOTSTRAP CSS -->
     <link id="style" href="{{ asset('assets/libs/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-
-    <!-- STYLES CSS -->
     <link href="{{ asset('assets/css/styles.css') }}" rel="stylesheet">
-
-    <!-- ICONS CSS -->
     <link href="{{ asset('assets/icon-fonts/icons.css') }}" rel="stylesheet">
-
-
-    <!-- NODE WAVES CSS -->
     <link href="{{ asset('assets/libs/node-waves/waves.min.css') }}" rel="stylesheet">
-
-    <!-- SIMPLEBAR CSS -->
     <link rel="stylesheet" href="{{ asset('assets/libs/simplebar/simplebar.min.css') }}">
-
-    <!-- PICKER CSS -->
     <link rel="stylesheet" href="{{ asset('assets/libs/flatpickr/flatpickr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/%40simonwep/pickr/themes/nano.min.css') }}">
-
-    <!-- AUTO COMPLETE CSS -->
     <link rel="stylesheet" href="{{ asset('assets/libs/%40tarekraafat/autocomplete.js/css/autoComplete.css') }}">
-
-    <!-- CHOICES CSS -->
     <link rel="stylesheet" href="{{ asset('assets/libs/choices.js/public/assets/styles/choices.min.css') }}">
-
-    <!-- CHOICES JS -->
     <script src="{{ asset('assets/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
-    <!-- MAIN JS -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
+   
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#raw_tiktok_account_id').select2({
+                placeholder: "Pilih salah satu...",
+                allowClear: true,
+                dropdownParent: $('#staticBackdrop')
+            });
+    
+            // Adjust z-index to make sure it works inside modal
+            $('#raw_tiktok_account_id').on('select2:open', function() {
+                $('.select2-container--open').css('z-index', 999999999);
+            });
+        });
+    </script>
+    
+
     <style>
         .colored-toast {
             position: fixed;
@@ -66,19 +64,17 @@
 
 <body>
 
-    <!-- Toast untuk sukses -->
     <div id="solid-successToast" class="toast colored-toast bg-success text-fixed-white fade" role="alert"
         aria-live="assertive" aria-atomic="true">
         <div class="toast-header bg-success text-fixed-white">
             <img class="bd-placeholder-img rounded me-2"
                 src="https://php.spruko.com/mamix/mamix/assets/images/brand-logos/toggle-dark.png" alt="...">
-            <strong class="me-auto">Mamix</strong>
+            <strong class="me-auto">Success</strong>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">Success! Data has been inserted.</div>
     </div>
 
-    <!-- Toast untuk gagal -->
     <div id="solid-errorToast" class="toast colored-toast bg-danger text-fixed-white fade" role="alert"
         aria-live="assertive" aria-atomic="true">
         <div class="toast-header bg-danger text-fixed-white">
@@ -137,7 +133,6 @@
                 </span>
             </div>
         </footer>
-        <!-- END FOOTER -->
 
     </div>
 
@@ -169,7 +164,6 @@
     <script src="{{ asset('assets/js/custom-switcher.js') }}"></script>
 
     @stack('scripts')
-
 </body>
 
 </html>

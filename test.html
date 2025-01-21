@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Chart with Drawing Animation</title>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #chart {
+            width: 600px;
+            width: 100%;
+        }
+        .apexcharts-yaxis-title {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="chart"></div>
+
+    <script>
+        var options = {
+            series: [{
+                name: 'Produk Terjual',
+                data: [80, 85, 60, 100, 90, 70, 110, 120, 125, 115, 105, 130, 135, 140, 125, 115, 160, 155, 170, 180, 130, 140, 150, 200, 210, 220, 170, 180, 160, 230]
+            }, {
+                name: 'Penjualan dari Iklan',
+                data: [7000000, 7100000, 6800000, 7300000, 7000000, 6800000, 7600000, 7800000, 7700000, 7500000, 7400000, 8000000, 8100000, 8200000, 8000000, 7900000, 8500000, 8600000, 8800000, 9000000, 8500000, 8700000, 8900000, 9400000, 9500000, 9700000, 9200000, 9400000, 9300000, 9900000]
+            }, {
+                name: 'Spend',
+                data: [9000000, 8000000, 5000000, 6000000, 7500000, 7000000, 8000000, 8500000, 8200000, 7800000, 7400000, 6900000, 7000000, 7600000, 7200000, 7100000, 8000000, 7800000, 8500000, 8700000, 8400000, 9000000, 9500000, 8800000, 8600000, 9200000, 9500000, 9300000, 9100000, 9800000]
+            }],
+            chart: {
+                type: 'line',
+                height: 350,
+                toolbar: {
+                    show: false
+                },
+                zoom: {
+                    enabled: false
+                },
+                background: 'transparent',
+                animations: {
+                    enabled: false // Disable default animation
+                }
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3,
+                dashArray: 0 // Remove dashed effect (set to 0 for solid line)
+            },
+            markers: {
+                size: 0 // Hide markers
+            },
+            xaxis: {
+                categories: Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`),
+                labels: {
+                    show: true, // Show x-axis labels
+                },
+                axisBorder: {
+                    show: false // Hide x-axis border
+                },
+                axisTicks: {
+                    show: false // Hide x-axis ticks
+                }
+            },
+            yaxis: [{
+                seriesName: 'Produk Terjual',
+                title: {
+                    text: 'Produk Terjual'
+                },
+                min: 0,
+                max: 250,
+                tickAmount: 5,
+                labels: {
+                    show: false // Hide y-axis labels
+                },
+                axisBorder: {
+                    show: false // Hide y-axis border
+                },
+                axisTicks: {
+                    show: false // Hide y-axis ticks
+                }
+            }, {
+                seriesName: 'Penjualan dari Iklan',
+                opposite: true,
+                title: {
+                    text: 'Penjualan dari Iklan'
+                },
+                min: 6000000,
+                max: 10000000,
+                tickAmount: 5,
+                labels: {
+                    show: false // Hide y-axis labels
+                },
+                axisBorder: {
+                    show: false // Hide y-axis border
+                },
+                axisTicks: {
+                    show: false // Hide y-axis ticks
+                }
+            }, {
+                seriesName: 'Spend',
+                opposite: true,
+                title: {
+                    text: 'Spend'
+                },
+                min: 5000000,
+                max: 10000000,
+                tickAmount: 5,
+                labels: {
+                    show: false // Hide y-axis labels
+                },
+                axisBorder: {
+                    show: false // Hide y-axis border
+                },
+                axisTicks: {
+                    show: false // Hide y-axis ticks
+                }
+            }],
+            grid: {
+                show: false // Hide the grid
+            },
+            tooltip: {
+                enabled: true
+            },
+            colors: ['#546E7A', '#26A69A', '#FF5722'],
+            legend: {
+                show: true
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render().then(function () {
+            // Get all the path elements for each series in the chart
+            const linePaths = document.querySelectorAll('path');
+
+            // Loop through each path and animate it
+            linePaths.forEach(function (linePath) {
+                const length = linePath.getTotalLength();
+                linePath.style.strokeDasharray = length; // Set stroke-dasharray to the length of the path
+                linePath.style.strokeDashoffset = length; // Hide the line initially
+
+                // Animate the line drawing from 0 to the total length
+                linePath.animate(
+                    [
+                        { strokeDashoffset: length }, // Start point
+                        { strokeDashoffset: 0 } // End point
+                    ],
+                    {
+                        duration: 1500, // Animation duration
+                        easing: 'ease-in-out', // Easing function
+                        fill: 'forwards' // Keep the animation effect after completion
+                    }
+                );
+            });
+        });
+    </script>
+
+</body>
+</html>

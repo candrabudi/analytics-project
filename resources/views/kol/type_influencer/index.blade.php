@@ -64,13 +64,12 @@
                     rows += `
                 <tr>
                     <td class="text-center"><input class="form-check-input" type="checkbox" id="checkboxNoLabeljob2" value="" aria-label="..."></td>
-                    <td><a href="${kolMaster.link_account}" target="_blank">${kolMaster.author_id}</a></td>
                     <td>${kolMaster.unique_id}</td>
                     <td>${kolMaster.nickname}</td>
-                    <td>${kolMaster.follower_count}</td>
-                    <td>${kolMaster.following_count}</td>
-                    <td>${kolMaster.heart_count}</td>
-                    <td>${kolMaster.video_count}</td>
+                    <td>${kolMaster.follower}</td>
+                    <td>${kolMaster.following}</td>
+                    <td>${kolMaster.like}</td>
+                    <td>${kolMaster.total_video}</td>
                     <td>
                         <span class="badge ${getBadgeClass(kolMaster.tier)}">${kolMaster.tier}</span>
                     </td>
@@ -127,13 +126,12 @@
                     rows += `
                 <tr>
                     <td class="text-center"><input class="form-check-input" type="checkbox" id="checkboxNoLabeljob2" value="" aria-label="..."></td>
-                    <td><a href="${kolMaster.link_account}" target="_blank">${kolMaster.author_id}</a></td>
                     <td>${kolMaster.unique_id}</td>
                     <td>${kolMaster.nickname}</td>
-                    <td>${kolMaster.follower_count}</td>
-                    <td>${kolMaster.following_count}</td>
-                    <td>${kolMaster.heart_count}</td>
-                    <td>${kolMaster.video_count}</td>
+                    <td>${kolMaster.follower}</td>
+                    <td>${kolMaster.following}</td>
+                    <td>${kolMaster.like}</td>
+                    <td>${kolMaster.total_video}</td>
                     <td>
                         <span class="badge ${getBadgeClass(kolMaster.tier)}">${kolMaster.tier}</span>
                     </td>
@@ -190,13 +188,12 @@
                     rows += `
                 <tr>
                     <td class="text-center"><input class="form-check-input" type="checkbox" id="checkboxNoLabeljob2" value="" aria-label="..."></td>
-                    <td><a href="${kolMaster.link_account}" target="_blank">${kolMaster.author_id}</a></td>
                     <td>${kolMaster.unique_id}</td>
                     <td>${kolMaster.nickname}</td>
-                    <td>${kolMaster.follower_count}</td>
-                    <td>${kolMaster.following_count}</td>
-                    <td>${kolMaster.heart_count}</td>
-                    <td>${kolMaster.video_count}</td>
+                    <td>${kolMaster.follower}</td>
+                    <td>${kolMaster.following}</td>
+                    <td>${kolMaster.like}</td>
+                    <td>${kolMaster.total_video}</td>
                     <td>
                         <span class="badge ${getBadgeClass(kolMaster.tier)}">${kolMaster.tier}</span>
                     </td>
@@ -253,13 +250,12 @@
                     rows += `
                 <tr>
                     <td class="text-center"><input class="form-check-input" type="checkbox" id="checkboxNoLabeljob2" value="" aria-label="..."></td>
-                    <td><a href="${kolMaster.link_account}" target="_blank">${kolMaster.author_id}</a></td>
-                    <td>${kolMaster.unique_id}</td>
+                    <td><a href="${kolMaster.link_account}" target="_blank">${kolMaster.unique_id}</a></td>
                     <td>${kolMaster.nickname}</td>
-                    <td>${kolMaster.follower_count}</td>
-                    <td>${kolMaster.following_count}</td>
-                    <td>${kolMaster.heart_count}</td>
-                    <td>${kolMaster.video_count}</td>
+                    <td>${kolMaster.follower}</td>
+                    <td>${kolMaster.following}</td>
+                    <td>${kolMaster.like}</td>
+                    <td>${kolMaster.total_video}</td>
                     <td>
                         <span class="badge ${getBadgeClass(kolMaster.tier)}">${kolMaster.tier}</span>
                     </td>

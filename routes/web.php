@@ -6,12 +6,14 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DatabaseRawController;
 use App\Http\Controllers\GeneralSettingController;
 use App\Http\Controllers\KOLController;
+use App\Http\Controllers\KolManagementController;
 use App\Http\Controllers\KolMasterController;
 use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\ScrapeEngagementController;
 use App\Http\Controllers\ScrapeUsernameController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserManagementController;
+use App\Models\KolManagement;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -99,4 +101,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('/kol/type-influencer', [KOLController::class, 'typeInfluencer'])->name('kol.type_influencer');
+
+    Route::get('/kol/management', [KolManagementController::class, 'index'])->name('kol.management.index');
+    Route::post('/kol/management/store', [KolManagementController::class, 'store'])->name('kol.management.store');
 });

@@ -67,7 +67,7 @@
                         <div class="card-body p-5">
                             <div class="mb-5 d-flex justify-content-center">
                                 <a href="">
-                                    <img src="{{ asset('assets/images/brand-logos/tensan_logo.png') }}" alt="logo" class="desktop-dark">
+                                    <img src="{{ asset('assets/images/brand-logos/doorlogo.png') }}" alt="logo" class="desktop-dark">
                                 </a>
                             </div>
                             <p class="h4 mb-2 fw-semibold">Sign In!</p>

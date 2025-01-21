@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\KolDataRaw;
+use App\Models\RawTiktokAccount;
 use Illuminate\Http\Request;
 
 class KOLController extends Controller
@@ -20,7 +21,7 @@ class KOLController extends Controller
         $search = $request->input('search', '');
         $tier = $request->input('tier', '');
 
-        $kols = KolDataRaw::when($search, function ($query) use ($search) {
+        $kols = RawTiktokAccount::when($search, function ($query) use ($search) {
                 $query->where('nickname', 'LIKE', "%$search%")
                     ->orWhere('unique_id', 'LIKE', "%$search%");
             })
