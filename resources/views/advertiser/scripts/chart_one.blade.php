@@ -6,7 +6,7 @@
 <script>
     // Gunakan AJAX untuk mengambil data dari API
     $.ajax({
-        url: 'http://localhost:8000/advertiser/dashboard/chart-one', // URL API Anda
+        url: '{{ route('advertiser.dashboard.getChartDataOne') }}', // URL API Anda
         method: 'GET',
         success: function(response) {
             // Jika data berhasil diambil, proses datanya
