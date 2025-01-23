@@ -1,6 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="my-4 page-header-breadcrumb d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div>
+            <h1 class="page-title fw-medium fs-18 mb-2">All Data</h1>
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"> <a href="javascript:void(0);"> Dashboards </a> </li>
+                <li class="breadcrumb-item active" aria-current="page">All Data</li>
+            </ol>
+        </div>
+        <div> 
+            <button class="btn btn-secondary-light btn-wave me-0 waves-effect waves-light"> 
+                <i class="ri-upload-cloud-line align-middle"></i> 
+                Export Report 
+            </button> 
+        </div>
+    </div>
     <div class="row">
         <div class="col-xxl-12 col-xl-12">
             <div class="row">
@@ -16,11 +31,12 @@
                                     </svg>ADVERTISER ANALYTICS
                                 </div>
                                 <span class="subtitle text-fixed-white">
-                                    Track the performance of your ads. Get detailed insights into clicks, impressions, conversion rates.
+                                    Track the performance of your ads. Get detailed insights into clicks, impressions,
+                                    conversion rates.
                                 </span>
                             </div>
                         </div>
-                        
+
                         <div class="card-body project-cardbody">
                             <div class="row">
                                 <div class="col-xl-12">
@@ -103,7 +119,7 @@
                                                         <div class="d-flex align-items-start">
                                                             <span class="svg-orange">
                                                                 <i class="ri-pulse-line"
-                                                                style="
+                                                                    style="
                                                                     font-size: 22.5px;
                                                                     background: linear-gradient(90deg, #FF5722 0%, #FF9800 100%);
                                                                     -webkit-background-clip: text;
@@ -184,7 +200,8 @@
                         },
                     },
                     colors: ["var(--primary-color)", "rgb(215, 124, 247)", "rgb(12, 215, 177)",
-                        "rgb(255, 99, 132)"],
+                        "rgb(255, 99, 132)"
+                    ],
                     grid: {
                         borderColor: '#f1f1f1',
                         strokeDashArray: 3

@@ -24,8 +24,6 @@
                         <table class="table text-nowrap">
                             <thead>
                                 <tr>
-                                    <th class="text-center"><input class="form-check-input" type="checkbox"
-                                            id="checkboxNoLabeljob1" value="" aria-label="..."></th>
                                     <th scope="col">USER ID</th>
                                     <th scope="col">USERNAME</th>
                                     <th scope="col">NAMA</th>
@@ -65,28 +63,30 @@
         function loadKolMaster(page = 1) {
             const search = $('#searchInput').val();
             const url = `/kol/master/load-list?page=${page}&search=${search}`;
-
+    
             $.get(url, function(data) {
                 let rows = '';
                 data.data.forEach(function(kolMaster) {
                     rows += `
-                <tr>
-                    <td class="text-center"><input class="form-check-input" type="checkbox" id="checkboxNoLabeljob2" value="" aria-label="..."></td>
-                    <td><a href="${kolMaster.link_account}" target="_blank">${kolMaster.author_id}</a></td>
-                    <td>${kolMaster.unique_id}</td>
-                    <td>${kolMaster.nickname}</td>
-                    <td>${kolMaster.follower_count}</td>
-                    <td>${kolMaster.following_count}</td>
-                    <td>${kolMaster.heart_count}</td>
-                    <td>${kolMaster.video_count}</td>
-                    <td>
-                        <span class="badge ${getBadgeClass(kolMaster.tier)}">${kolMaster.tier}</span>
-                    </td>
-                </tr>`;
+                    <tr>
+                        <td><a href="${kolMaster.link_account}" target="_blank">${kolMaster.author_id}</a></td>
+                        <td>${kolMaster.unique_id}</td>
+                        <td>${kolMaster.nickname}</td>
+                        <td>${kolMaster.follower_count}</td>
+                        <td>${kolMaster.following_count}</td>
+                        <td>${kolMaster.heart_count}</td>
+                        <td>${kolMaster.video_count}</td>
+                        <td>
+                            <span class="badge ${getBadgeClass(kolMaster.tier)}">${kolMaster.tier}</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="window.location.href='/kol/master/edit/${kolMaster.id}'">Edit</button>
+                        </td>
+                    </tr>`;
                 });
-
+    
                 $('#tableBody').html(rows);
-
+    
                 const paginationLinks = data.links.map(link => {
                     let pageNumber = link.url ? new URL(link.url).searchParams.get('page') : 1;
                     return `<li class="page-item ${link.active ? 'active' : ''}">
@@ -98,7 +98,7 @@
                     `Showing ${data.from} to ${data.to} of ${data.total} entries`);
             });
         }
-
+    
         function getBadgeClass(tier) {
             switch (tier.toLowerCase()) {
                 case 'nano':
@@ -113,13 +113,14 @@
                     return 'light'; // default warna
             }
         }
-
+    
         $(document).ready(function() {
             $('#searchInput').on('keyup', function() {
                 loadKolMaster();
             });
-
+    
             loadKolMaster();
         });
     </script>
+    
 @endsection

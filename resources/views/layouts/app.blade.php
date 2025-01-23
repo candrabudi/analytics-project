@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="transparent"
-    data-width="default" data-menu-styles="light" data-toggled="close">
+    data-width="fullwidth" data-menu-styles="light" data-toggled="close">
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
 <head>

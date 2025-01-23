@@ -57,27 +57,30 @@
         function loadKolNano(page = 1) {
             const search = $('#searchInputNano').val();
             const url = `/kol/master/load-list?page=${page}&search=${search}&tier=nano`;
-
+    
             $.get(url, function(data) {
                 let rows = '';
                 data.data.forEach(function(kolMaster) {
                     rows += `
-                <tr>
-                    <td class="text-center"><input class="form-check-input" type="checkbox" id="checkboxNoLabeljob2" value="" aria-label="..."></td>
-                    <td>${kolMaster.unique_id}</td>
-                    <td>${kolMaster.nickname}</td>
-                    <td>${kolMaster.follower}</td>
-                    <td>${kolMaster.following}</td>
-                    <td>${kolMaster.like}</td>
-                    <td>${kolMaster.total_video}</td>
-                    <td>
-                        <span class="badge ${getBadgeClass(kolMaster.tier)}">${kolMaster.tier}</span>
-                    </td>
-                </tr>`;
+                    <tr>
+                        <td class="text-center"><input class="form-check-input" type="checkbox" id="checkboxNoLabeljob2" value="" aria-label="..."></td>
+                        <td>${kolMaster.unique_id}</td>
+                        <td>${kolMaster.nickname}</td>
+                        <td>${kolMaster.follower}</td>
+                        <td>${kolMaster.following}</td>
+                        <td>${kolMaster.like}</td>
+                        <td>${kolMaster.total_video}</td>
+                        <td>
+                            <span class="badge ${getBadgeClass(kolMaster.tier)}">${kolMaster.tier}</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="window.location.href='/kol/master/edit/${kolMaster.id}'">Edit</button>
+                        </td>
+                    </tr>`;
                 });
-
+    
                 $('#table-nano').html(rows);
-
+    
                 const paginationNanoLinks = data.links.map(link => {
                     let pageNumber = link.url ? new URL(link.url).searchParams.get('page') : 1;
                     return `<li class="page-item ${link.active ? 'active' : ''}">
@@ -89,7 +92,7 @@
                     `Showing ${data.from} to ${data.to} of ${data.total} entries`);
             });
         }
-
+    
         function getBadgeClass(tier) {
             switch (tier.toLowerCase()) {
                 case 'nano':
@@ -104,54 +107,122 @@
                     return 'light';
             }
         }
-
+    
         $(document).ready(function() {
             $('#searchInputNano').on('keyup', function() {
                 loadKolNano();
             });
-
+    
             loadKolNano();
         });
     </script>
     
     
+    
     <script>
+        // Fungsi loadKolMicro
         function loadKolMicro(page = 1) {
             const search = $('#searchInputMicro').val();
             const url = `/kol/master/load-list?page=${page}&search=${search}&tier=micro`;
-
+    
             $.get(url, function(data) {
                 let rows = '';
                 data.data.forEach(function(kolMaster) {
                     rows += `
-                <tr>
-                    <td class="text-center"><input class="form-check-input" type="checkbox" id="checkboxNoLabeljob2" value="" aria-label="..."></td>
-                    <td>${kolMaster.unique_id}</td>
-                    <td>${kolMaster.nickname}</td>
-                    <td>${kolMaster.follower}</td>
-                    <td>${kolMaster.following}</td>
-                    <td>${kolMaster.like}</td>
-                    <td>${kolMaster.total_video}</td>
-                    <td>
-                        <span class="badge ${getBadgeClass(kolMaster.tier)}">${kolMaster.tier}</span>
-                    </td>
-                </tr>`;
+                    <tr>
+                        <td class="text-center"><input class="form-check-input" type="checkbox" id="checkboxNoLabeljob2" value="" aria-label="..."></td>
+                        <td>${kolMaster.unique_id}</td>
+                        <td>${kolMaster.nickname}</td>
+                        <td>${kolMaster.follower}</td>
+                        <td>${kolMaster.following}</td>
+                        <td>${kolMaster.like}</td>
+                        <td>${kolMaster.total_video}</td>
+                        <td>
+                            <span class="badge ${getBadgeClass(kolMaster.tier)}">${kolMaster.tier}</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="window.location.href='/kol/master/edit/${kolMaster.id}'">Edit</button>
+                        </td>
+                    </tr>`;
                 });
-
+    
                 $('#table-micro').html(rows);
-
-                const paginationMicroLinks = data.links.map(link => {
-                    let pageNumber = link.url ? new URL(link.url).searchParams.get('page') : 1;
-                    return `<li class="page-item ${link.active ? 'active' : ''}">
-                        <a class="page-link" href="javascript:void(0);" onclick="loadKolMicro(${pageNumber})">${link.label}</a>
-                    </li>`;
-                }).join('');
-                $('#paginationMicroLinks').html(paginationMicroLinks);
-                $('#paginationMicroInfo').html(
-                    `Showing ${data.from} to ${data.to} of ${data.total} entries`);
+                updatePagination(data, 'paginationMicro');
             });
         }
-
+    
+        function loadKolMacro(page = 1) {
+            const search = $('#searchInputMacro').val();
+            const url = `/kol/master/load-list?page=${page}&search=${search}&tier=macro`;
+    
+            $.get(url, function(data) {
+                let rows = '';
+                data.data.forEach(function(kolMaster) {
+                    rows += `
+                    <tr>
+                        <td class="text-center"><input class="form-check-input" type="checkbox" id="checkboxNoLabeljob2" value="" aria-label="..."></td>
+                        <td>${kolMaster.unique_id}</td>
+                        <td>${kolMaster.nickname}</td>
+                        <td>${kolMaster.follower}</td>
+                        <td>${kolMaster.following}</td>
+                        <td>${kolMaster.like}</td>
+                        <td>${kolMaster.total_video}</td>
+                        <td>
+                            <span class="badge ${getBadgeClass(kolMaster.tier)}">${kolMaster.tier}</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="window.location.href='/kol/master/edit/${kolMaster.id}'">Edit</button>
+                        </td>
+                    </tr>`;
+                });
+    
+                $('#table-macro').html(rows);
+                updatePagination(data, 'paginationMacro');
+            });
+        }
+    
+        function loadKolMega(page = 1) {
+            const search = $('#searchInputMega').val();
+            const url = `/kol/master/load-list?page=${page}&search=${search}&tier=mega`;
+    
+            $.get(url, function(data) {
+                let rows = '';
+                data.data.forEach(function(kolMaster) {
+                    rows += `
+                    <tr>
+                        <td class="text-center"><input class="form-check-input" type="checkbox" id="checkboxNoLabeljob2" value="" aria-label="..."></td>
+                        <td><a href="${kolMaster.link_account}" target="_blank">${kolMaster.unique_id}</a></td>
+                        <td>${kolMaster.nickname}</td>
+                        <td>${kolMaster.follower}</td>
+                        <td>${kolMaster.following}</td>
+                        <td>${kolMaster.like}</td>
+                        <td>${kolMaster.total_video}</td>
+                        <td>
+                            <span class="badge ${getBadgeClass(kolMaster.tier)}">${kolMaster.tier}</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="window.location.href='/kol/master/edit/${kolMaster.id}'">Edit</button>
+                        </td>
+                    </tr>`;
+                });
+    
+                $('#table-mega').html(rows);
+                updatePagination(data, 'paginationMega');
+            });
+        }
+    
+        function updatePagination(data, paginationId) {
+            const paginationLinks = data.links.map(link => {
+                let pageNumber = link.url ? new URL(link.url).searchParams.get('page') : 1;
+                return `<li class="page-item ${link.active ? 'active' : ''}">
+                    <a class="page-link" href="javascript:void(0);" onclick="loadKol${paginationId.charAt(9).toUpperCase() + paginationId.slice(10)}(${pageNumber})">${link.label}</a>
+                </li>`;
+            }).join('');
+            $(`#${paginationId}Links`).html(paginationLinks);
+            $(`#${paginationId}Info`).html(
+                `Showing ${data.from} to ${data.to} of ${data.total} entries`);
+        }
+    
         function getBadgeClass(tier) {
             switch (tier.toLowerCase()) {
                 case 'nano':
@@ -166,137 +237,22 @@
                     return 'light';
             }
         }
-
+    
         $(document).ready(function() {
             $('#searchInputMicro').on('keyup', function() {
                 loadKolMicro();
             });
-
-            loadKolMicro();
-        });
-    </script>
-    
-    
-    <script>
-        function loadKolMacro(page = 1) {
-            const search = $('#searchInputMacro').val();
-            const url = `/kol/master/load-list?page=${page}&search=${search}&tier=macro`;
-
-            $.get(url, function(data) {
-                let rows = '';
-                data.data.forEach(function(kolMaster) {
-                    rows += `
-                <tr>
-                    <td class="text-center"><input class="form-check-input" type="checkbox" id="checkboxNoLabeljob2" value="" aria-label="..."></td>
-                    <td>${kolMaster.unique_id}</td>
-                    <td>${kolMaster.nickname}</td>
-                    <td>${kolMaster.follower}</td>
-                    <td>${kolMaster.following}</td>
-                    <td>${kolMaster.like}</td>
-                    <td>${kolMaster.total_video}</td>
-                    <td>
-                        <span class="badge ${getBadgeClass(kolMaster.tier)}">${kolMaster.tier}</span>
-                    </td>
-                </tr>`;
-                });
-
-                $('#table-macro').html(rows);
-
-                const paginationMacroLinks = data.links.map(link => {
-                    let pageNumber = link.url ? new URL(link.url).searchParams.get('page') : 1;
-                    return `<li class="page-item ${link.active ? 'active' : ''}">
-                        <a class="page-link" href="javascript:void(0);" onclick="loadKolMacro(${pageNumber})">${link.label}</a>
-                    </li>`;
-                }).join('');
-                $('#paginationMacroLinks').html(paginationMacroLinks);
-                $('#paginationMacroInfo').html(
-                    `Showing ${data.from} to ${data.to} of ${data.total} entries`);
-            });
-        }
-
-        function getBadgeClass(tier) {
-            switch (tier.toLowerCase()) {
-                case 'nano':
-                    return 'bg-secondary-transparent';
-                case 'micro':
-                    return 'bg-primary-transparent';
-                case 'macro':
-                    return 'bg-warning-transparent';
-                case 'mega':
-                    return 'bg-danger-transparent';
-                default:
-                    return 'light';
-            }
-        }
-
-        $(document).ready(function() {
             $('#searchInputMacro').on('keyup', function() {
                 loadKolMacro();
             });
-
-            loadKolMacro();
-        });
-    </script>
-    
-    
-    <script>
-        function loadKolMega(page = 1) {
-            const search = $('#searchInputMega').val();
-            const url = `/kol/master/load-list?page=${page}&search=${search}&tier=mega`;
-
-            $.get(url, function(data) {
-                let rows = '';
-                data.data.forEach(function(kolMaster) {
-                    rows += `
-                <tr>
-                    <td class="text-center"><input class="form-check-input" type="checkbox" id="checkboxNoLabeljob2" value="" aria-label="..."></td>
-                    <td><a href="${kolMaster.link_account}" target="_blank">${kolMaster.unique_id}</a></td>
-                    <td>${kolMaster.nickname}</td>
-                    <td>${kolMaster.follower}</td>
-                    <td>${kolMaster.following}</td>
-                    <td>${kolMaster.like}</td>
-                    <td>${kolMaster.total_video}</td>
-                    <td>
-                        <span class="badge ${getBadgeClass(kolMaster.tier)}">${kolMaster.tier}</span>
-                    </td>
-                </tr>`;
-                });
-
-                $('#table-mega').html(rows);
-
-                const paginationMegaLinks = data.links.map(link => {
-                    let pageNumber = link.url ? new URL(link.url).searchParams.get('page') : 1;
-                    return `<li class="page-item ${link.active ? 'active' : ''}">
-                        <a class="page-link" href="javascript:void(0);" onclick="loadKolMega(${pageNumber})">${link.label}</a>
-                    </li>`;
-                }).join('');
-                $('#paginationMegaLinks').html(paginationMegaLinks);
-                $('#paginationMegaInfo').html(
-                    `Showing ${data.from} to ${data.to} of ${data.total} entries`);
-            });
-        }
-
-        function getBadgeClass(tier) {
-            switch (tier.toLowerCase()) {
-                case 'nano':
-                    return 'bg-secondary-transparent';
-                case 'micro':
-                    return 'bg-primary-transparent';
-                case 'macro':
-                    return 'bg-warning-transparent';
-                case 'mega':
-                    return 'bg-danger-transparent';
-                default:
-                    return 'light';
-            }
-        }
-
-        $(document).ready(function() {
             $('#searchInputMega').on('keyup', function() {
                 loadKolMega();
             });
-
+    
+            loadKolMicro();
+            loadKolMacro();
             loadKolMega();
         });
     </script>
+    
 @endsection

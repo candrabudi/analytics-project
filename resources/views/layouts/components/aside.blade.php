@@ -29,8 +29,8 @@
             </div>
             <ul class="main-menu">
                 <li class="slide__category"><span class="category-name">Main</span></li>
-                <li class="slide">
-                    <a href="{{ route('dashboard') }}" class="side-menu__item {{ request()->is('dashboard') ? 'menu-active' : '' }}">
+                <li class="slide {{ request()->is('dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('dashboard') }}" class="side-menu__item {{ request()->is('dashboard') ? 'active' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" width="32" height="32"
                             viewBox="0 0 256 256">
                             <path

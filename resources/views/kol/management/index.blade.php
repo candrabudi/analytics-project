@@ -15,16 +15,15 @@
                     <div class="d-flex flex-wrap gap-2 align-items-center">
                         <div>
                             <input class="form-control form-control-sm" id="searchInput" type="text"
-                                   placeholder="Search Here" aria-label=".form-control-sm example"
-                                   style="height: 30px;">
+                                placeholder="Search Here" aria-label=".form-control-sm example" style="height: 30px;">
                         </div>
                         <div>
                             <input type="text" id="dateRange" class="form-control form-control-sm"
-                                   placeholder="Select Date Range" style="height: 30px;">
+                                placeholder="Select Date Range" style="height: 30px;">
                         </div>
                         <div>
                             <a type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                               data-bs-target="#staticBackdrop">Tambah KOL</a>
+                                data-bs-target="#staticBackdrop">Tambah KOL</a>
                         </div>
                     </div>
                 </div>
@@ -74,35 +73,33 @@
         </div>
     </div>
 
-    <div class="modal fade" id="staticBackdrop" abindex="-1"
-        aria-labelledby="staticBackdropLabel" style="display: none;" aria-hidden="true">
+    <div class="modal fade" id="staticBackdrop" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"
+        data-bs-backdrop="static">
         <div class="modal-dialog modal-lg">
-            <form action="">
+            <form id="kolForm">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h6 class="modal-title" id="staticBackdropLabel">Tambah Data KOL Management</h6>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            id="closeModalBtn"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="raw_tiktok_account_id" class="mb-3">Pilih User TikTok</label>
-                                <select class="form-control" name="raw_tiktok_account_id"
-                                    id="raw_tiktok_account_id" data-placeholder="Pilih salah satu...">
+                                <select class="form-control" name="raw_tiktok_account_id" id="raw_tiktok_account_id">
                                     <option></option>
                                     @foreach ($rawTikTokAccounts as $rawTiktok)
                                         <option value="{{ $rawTiktok->id }}">{{ $rawTiktok->unique_id }}</option>
                                     @endforeach
                                 </select>
                             </div>
-
                             <div class="col-md-6 mb-3">
                                 <label for="pic_id" class="mb-3">PIC</label>
                                 <input type="text" class="form-control" name="pic_id" id="pic_id"
                                     placeholder="Masukkan ID PIC">
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="platform" class="mb-3">Platform</label>
@@ -115,14 +112,12 @@
                                     <option value="Google">Google</option>
                                 </select>
                             </div>
-
                             <div class="col-md-6 mb-3">
                                 <label for="ratecard_kol" class="mb-3">Ratecard KOL</label>
                                 <input type="number" class="form-control" name="ratecard_kol" id="ratecard_kol"
                                     placeholder="Masukkan ratecard KOL">
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="ratecard_deal" class="mb-3">Ratecard Deal</label>
@@ -135,14 +130,12 @@
                                     placeholder="Masukkan target views">
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="views_achieved" class="mb-3">Views Achieved</label>
                                 <input type="number" class="form-control" name="views_achieved" id="views_achieved"
                                     placeholder="Masukkan views yang dicapai">
                             </div>
-
                             <div class="col-md-6 mb-3">
                                 <label for="status" class="mb-3">Status</label>
                                 <select class="form-control" name="status" id="status">
@@ -151,24 +144,15 @@
                                 </select>
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="cpv" class="mb-3">CPV (Cost Per View)</label>
-                                <input type="number" step="0.01" class="form-control" name="cpv" id="cpv"
-                                    placeholder="Masukkan nilai CPV">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="deal_date" class="mb-3">Deal Date</label>
-                                <input type="date" class="form-control" name="deal_date" id="deal_date">
-                            </div>
-                        </div>
-
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="deal_post" class="mb-3">Deal Post</label>
                                 <input type="number" step="0.01" class="form-control" name="deal_post"
                                     id="deal_post" placeholder="Masukkan nilai deal post">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="deal_date" class="mb-3">Deal Date</label>
+                                <input type="date" class="form-control" name="deal_date" id="deal_date">
                             </div>
                         </div>
                         <div class="form-group mb-3">
@@ -177,20 +161,24 @@
                                 placeholder="Tambahkan catatan jika ada"></textarea>
                         </div>
                     </div>
-
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            <span id="submitBtnText">Simpan</span>
+                            <span id="submitBtnLoader" class="spinner-border spinner-border-sm" role="status"
+                                aria-hidden="true" style="display: none;"></span>
+                        </button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    
+
     <script>
         $(document).ready(function() {
             $('#dateRange').daterangepicker({
@@ -206,5 +194,129 @@
             });
         });
     </script>
-    
+
+
+    <script>
+        $(document).ready(function() {
+            $('#kolForm').on('submit', function(e) {
+                e.preventDefault(); // Prevent form from submitting traditionally
+
+                // Disable the close button and the submit button
+                $('#closeModalBtn').prop('disabled', true);
+                $('#submitBtn').prop('disabled', true);
+                $('#submitBtnLoader').show(); // Show the loading spinner
+                $('#submitBtnText').text('Saving...'); // Change button text to indicate processing
+
+                let formData = $(this).serialize(); // Serialize form data
+
+                $.ajax({
+                    url: "{{ route('kol.management.store') }}", // Adjust this URL to your route
+                    type: "POST",
+                    data: formData,
+                    success: function(response) {
+                        // Success handling
+                        alert('Data saved successfully!');
+                        $('#staticBackdrop').modal('hide'); // Hide modal upon success
+                        $('#kolForm')[0].reset(); // Reset the form
+                    },
+                    error: function(xhr, status, error) {
+                        // Error handling
+                        alert('There was an error saving the data.');
+                    },
+                    complete: function() {
+                        // Re-enable the close button and submit button
+                        $('#closeModalBtn').prop('disabled', false);
+                        $('#submitBtn').prop('disabled', false);
+                        $('#submitBtnLoader').hide(); // Hide the loading spinner
+                        $('#submitBtnText').text('Simpan'); // Restore original button text
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        function loadData(page = 1) {
+            const search = $('#searchInput').val();
+            const url = `/kol/management/list?page=${page}&search=${search}`;
+
+            $.get(url, function(data) {
+                let rows = '';
+                data.data.forEach(function(kolData) {
+                    let actionButtons = '';
+                    if (kolData.status === 'pending') {
+                        actionButtons += `
+                            <button class="btn btn-success btn-sm btn-approve" data-id="${kolData.id}">Approve</button>
+                            <button class="btn btn-danger btn-sm btn-reject" data-id="${kolData.id}">Reject</button>
+                        `;
+                    }
+                    actionButtons += `
+                        <button class="btn btn-warning btn-sm btn-edit" data-id="${kolData.id}">Edit</button>
+                    `;
+                    let roundedCpv = (kolData.ratecard_deal / kolData.raw_tiktok_account.avg_views).toFixed(2);
+                    rows += `
+                        <tr>
+                            <td>${kolData.created_at}</td>
+                            <td>${kolData.raw_tiktok_account.unique_id}</td>
+                            <td>${kolData.raw_tiktok_account.follower}</td>
+                            <td>${kolData.raw_tiktok_account.whatsapp}</td>
+                            <td>${kolData.raw_tiktok_account.tier}</td>
+                            <td>${kolData.ratecard_kol}</td>
+                            <td>${kolData.ratecard_deal}</td>
+                            <td>${kolData.target_views}</td>
+                            <td>${kolData.raw_tiktok_account.avg_views}</td>
+                            <td>${roundedCpv}</td>
+                            <td>${kolData.deal_post}</td>
+                            <td>${kolData.deal_post}</td>
+                            <td>${kolData.deal_post}</td>
+                            <td>
+                                <span class="badge ${getBadgeClass(kolData.status)}">${kolData.status}</span>
+                            </td>
+                            <td>Belum Bayar</td>
+                            <td>Belum Dikirim</td>
+                            <td>
+                                ${actionButtons}
+                            </td>
+                        </tr>`;
+                });
+
+
+                $('#tableBody').html(rows);
+
+                const paginationLinks = data.links.map(link => {
+                    let pageNumber = link.url ? new URL(link.url).searchParams.get('page') : 1;
+                    return `<li class="page-item ${link.active ? 'active' : ''}">
+                        <a class="page-link" href="javascript:void(0);" onclick="loadData(${pageNumber})">${link.label}</a>
+                    </li>`;
+                }).join('');
+                $('#paginationLinks').html(paginationLinks);
+                $('#paginationInfo').html(
+                    `Showing ${data.from} to ${data.to} of ${data.total} entries`);
+            });
+        }
+
+        function getBadgeClass(status) {
+            switch (status.toLowerCase()) {
+                case 'pending':
+                    return 'bg-warning-transparent';
+                case 'approved':
+                    return 'bg-success-transparent';
+                case 'rejected':
+                    return 'bg-danger-transparent';
+                case 'mega':
+                    return 'bg-danger-transparent';
+                default:
+                    return 'light';
+            }
+        }
+
+        $(document).ready(function() {
+            $('#searchInput').on('keyup', function() {
+                loadData();
+            });
+
+            loadData();
+        });
+    </script>
+
 @endsection

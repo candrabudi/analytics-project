@@ -1,14 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
-    {{-- <style>
-    .apexcharts-yaxis-title {
-        display: none;
-    }
-    .apexcharts-yaxis {
-        display: none;
-    }
-</style> --}}
+    <div class="my-4 page-header-breadcrumb d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div>
+            <h1 class="page-title fw-medium fs-18 mb-2">Meta Dashboard</h1>
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"> <a href="javascript:void(0);"> Meta </a> </li>
+                <li class="breadcrumb-item active" aria-current="page">Meta Dashboard</li>
+            </ol>
+        </div>
+        <div>
+            <button class="btn btn-secondary-light btn-wave me-0 waves-effect waves-light">
+                <i class="ri-upload-cloud-line align-middle"></i>
+                Export Report
+            </button>
+        </div>
+    </div>
     <div class="row">
         <div class="col-xxl-3 col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
             <div class="card custom-card">
@@ -177,15 +184,17 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li><a class="dropdown-item" href="javascript:void(0);" id="this-week">This Week</a></li>
                                 <li><a class="dropdown-item" href="javascript:void(0);" id="last-week">Last Week</a></li>
-                                <li><a class="dropdown-item" href="javascript:void(0);" id="this-month">This Month</a></li>
-                                <li><a class="dropdown-item" href="javascript:void(0);" id="last-month">Last Month</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0);" id="this-month">This Month</a>
+                                </li>
+                                <li><a class="dropdown-item" href="javascript:void(0);" id="last-month">Last Month</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-body position-relative p-0">
-                    <div id="chart"></div>
+                    <div id="chart" style="margin-top: -30px;"></div>
                 </div>
             </div>
         </div>
@@ -203,11 +212,12 @@
                         aria-controls="scaledown" aria-selected="false">SCALE DOWN ADS</a>
                 </li>
             </ul>
-    
+
             <div class="row">
                 <div class="col-sm-6">
                     <div class="tab-content mt-3" id="scaleTabsContent">
-                        <div class="tab-pane fade show active" id="scaleup" role="tabpanel" aria-labelledby="scaleup-tab">
+                        <div class="tab-pane fade show active" id="scaleup" role="tabpanel"
+                            aria-labelledby="scaleup-tab">
                             <div class="card custom-card">
                                 <div class="card-header">
                                     <div class="card-title">
@@ -226,7 +236,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="data-table-body-scaleup">
-        
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -236,7 +246,7 @@
                                         <div class="ms-auto">
                                             <nav aria-label="Page navigation" class="pagination-style-4">
                                                 <ul class="pagination mb-0" id="pagination-scaleup">
-        
+
                                                 </ul>
                                             </nav>
                                         </div>
@@ -244,7 +254,7 @@
                                 </div>
                             </div>
                         </div>
-            
+
                         <div class="tab-pane fade" id="scaledown" role="tabpanel" aria-labelledby="scaledown-tab">
                             <div class="card custom-card">
                                 <div class="card-header">
@@ -264,7 +274,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="data-table-body-scaledown">
-        
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -274,7 +284,7 @@
                                         <div class="ms-auto">
                                             <nav aria-label="Page navigation" class="pagination-style-4">
                                                 <ul class="pagination mb-0" id="pagination-scaledown">
-        
+
                                                 </ul>
                                             </nav>
                                         </div>
@@ -304,7 +314,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="data-table-body-winingads">
-        
+
                                     </tbody>
                                 </table>
                             </div>
@@ -314,7 +324,7 @@
                                 <div class="ms-auto">
                                     <nav aria-label="Page navigation" class="pagination-style-4">
                                         <ul class="pagination mb-0" id="pagination-scaleup">
-        
+
                                         </ul>
                                     </nav>
                                 </div>
@@ -323,10 +333,10 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
-    
+
 
 
     <div class="row mt-3">

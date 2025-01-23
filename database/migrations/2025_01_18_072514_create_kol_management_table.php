@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('kol_management', function (Blueprint $table) {
             $table->id();
+            $table->string('kol_trx_no');
             $table->bigInteger('raw_tiktok_account_id');
             $table->bigInteger('pic_id');
             $table->enum('platform', ['Instagram', 'TikTok', 'Facebook', 'SnackVideo', 'Youtube', 'Google'])->default('tiktok');
@@ -21,9 +22,8 @@ return new class extends Migration
             $table->integer('target_views')->nullable();
             $table->integer('views_achieved')->nullable();
             $table->enum('status', ['pending', 'approved'])->default('pending');
-            $table->decimal('cpv')->nullable();
             $table->date('deal_date')->nullable();
-            $table->decimal('deal_post')->nullable();
+            $table->integer('deal_post')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
         });

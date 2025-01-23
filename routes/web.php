@@ -103,5 +103,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/kol/type-influencer', [KOLController::class, 'typeInfluencer'])->name('kol.type_influencer');
 
     Route::get('/kol/management', [KolManagementController::class, 'index'])->name('kol.management.index');
+    Route::get('/kol/management/list', [KolManagementController::class, 'list'])->name('kol.management.list');
     Route::post('/kol/management/store', [KolManagementController::class, 'store'])->name('kol.management.store');
 });
