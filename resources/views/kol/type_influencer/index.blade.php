@@ -47,6 +47,8 @@
                                         <thead>
                                             <tr>
                                                 <th>USERNAME</th>
+                                                <th>FOLLOWER</th>
+                                                <th>AVG VIEWS</th>
                                                 <th>KATEGORI</th>
                                                 <th>LABEL</th>
                                                 <th>NOMOR</th>
@@ -113,7 +115,11 @@
             $.get(url, function(data) {
                 let rows = '';
                 data.data.forEach(function(kolMaster) {
-                    let assignCategories = kolMaster.assign_category?.length ? kolMaster.assign_category.map(category => category.name).join(', ') : 'No Category';
+                    let assignCategories = kolMaster.assign_category?.length ? 
+                    kolMaster.assign_category.map(category => 
+                        `<span class="badge bg-secondary">${category.name}</span>`
+                    ).join(' ') : 'No Category';
+
                     let statusClass = '';
                     let statusLabel = kolMaster.status_call;
 
@@ -123,9 +129,20 @@
                         case 'no_response': statusClass = 'badge bg-danger'; break;
                     }
 
+                    function formatNumber(num) {
+                        if (num >= 1000000) {
+                            return (num / 1000000).toFixed(1) + 'jt';
+                        } else if (num >= 1000) {
+                            return (num / 1000).toFixed(0) + 'rb';
+                        }
+                        return num;
+                    }
+
                     rows += `
                         <tr>
                             <td>${kolMaster.unique_id} <a href="https://tiktok.com/@${kolMaster.unique_id}" target="_blank"><i class="fa fa-link"></i></a></td>
+                            <td>${formatNumber(kolMaster.follower)}</td>
+                            <td>${formatNumber(kolMaster.avg_views)}</td>
                             <td>${assignCategories}</td>
                             <td><span class="${statusClass}">${statusLabel}</span></td>
                             <td>${kolMaster.whatsapp_number}</td>

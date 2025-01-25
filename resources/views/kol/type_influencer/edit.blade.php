@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'EDIT AKUN ' . strtoupper($rawTiktokAccount->nickname))
 @section('content')
-
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <div class="row mb-3">
         <div class="col-xl-12">
             <div class="tab-content">
@@ -105,6 +105,19 @@
                                                 placeholder="WhatsApp Number">
                                         </div>
                                     </div>
+                                    <div class="row mb-3">
+                                        <div class="form-group col-md-4">
+                                            <label for="categories">Categories</label>
+                                            <select class="form-control" id="categories" name="categories[]" multiple>
+                                                @foreach($categories as $category)
+                                                    <option value="{{ $category->id }}" 
+                                                        {{ in_array($category->id, $selectedCategories) ? 'selected' : '' }}>
+                                                        {{ $category->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
 
                                     <div class="form-group mb-3">
                                         <label for="notes">Notes</label>
@@ -134,4 +147,14 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize Select2 on the categories select element
+            $('#categories').select2({
+                placeholder: "Select categories",
+                allowClear: true
+            });
+        });
+    </script>
 @endsection

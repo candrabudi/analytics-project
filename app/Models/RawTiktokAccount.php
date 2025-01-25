@@ -19,7 +19,7 @@ class RawTiktokAccount extends Model
         'like',
         'total_video',
         'avg_views',
-        'engagement_rate',
+        'total_interactions',
         'status_call',
         'whatsapp_number',
         'notes',
@@ -41,4 +41,10 @@ class RawTiktokAccount extends Model
         return $this->hasMany(AssignTiktokCategory::class, 'raw_tiktok_account_id', 'id')
             ->join('tiktok_categories as tc', 'tc.id', '=', 'assign_tiktok_categories.tiktok_category_id');
     }
+
+    public function categories()
+    {
+        return $this->belongsToMany(TiktokCategory::class, 'assign_tiktok_categories');
+    }
+    
 }

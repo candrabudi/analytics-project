@@ -50,10 +50,10 @@ class KOLController extends Controller
 
     public function editDatabaseRaw($a)
     {
-        $rawTiktokAccount = RawTiktokAccount::where('id', $a)
-            ->first();
-
-        return view('kol.type_influencer.edit', compact('rawTiktokAccount'));
+        $rawTiktokAccount = RawTiktokAccount::findOrFail($a);
+        $categories = TiktokCategory::all();
+        $selectedCategories = $rawTiktokAccount->categories->pluck('id')->toArray();
+        return view('kol.type_influencer.edit', compact('rawTiktokAccount', 'selectedCategories', 'categories'));
     }
     
     public function updateDatabaseRaw(Request $request, $id)
@@ -73,6 +73,17 @@ class KOLController extends Controller
             $fileName = time() . '_' . $file->getClientOriginalName();
             $file->storeAs('public/files', $fileName);
             $rawTiktokAccount->file = $fileName;
+        }
+
+        $rawTiktokAccount->update($request->except('categories'));
+
+        // Handle categories
+        if ($request->has('categories')) {
+            // First, delete existing categories assigned to this account
+            $rawTiktokAccount->categories()->detach();
+
+            // Then, assign the new categories
+            $rawTiktokAccount->categories()->attach($request->categories);
         }
 
         $rawTiktokAccount->save();
