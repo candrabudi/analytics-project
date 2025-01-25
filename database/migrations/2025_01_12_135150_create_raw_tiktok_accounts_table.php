@@ -23,9 +23,9 @@ return new class extends Migration
             $table->integer('avg_views')->default(0);
             $table->double('engagement_rate')->default(0);
             $table->enum('status_call', ['pending', 'response', 'no_response'])->default('pending');
-            $table->string('whatsapp_number')->default(0)->nullable();
-            $table->string('notes')->default(0)->nullable();
-            $table->string('file')->default(0)->nullable();
+            $table->string('whatsapp_number')->nullable();
+            $table->string('notes')->nullable();
+            $table->string('file')->nullable();
             $table->timestamps();
         });
     }
