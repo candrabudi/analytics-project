@@ -35,4 +35,10 @@ class RawTiktokAccount extends Model
 
         return null;
     }
+
+    public function assignCategory()
+    {
+        return $this->hasMany(AssignTiktokCategory::class, 'raw_tiktok_account_id', 'id')
+            ->join('tiktok_categories as tc', 'tc.id', '=', 'assign_tiktok_categories.tiktok_category_id');
+    }
 }

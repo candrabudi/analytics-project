@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <div class="row">
         <div class="col-xl-12">
             <div class="card custom-card">
@@ -53,7 +54,6 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col">USERNAME</th>
-                                                <th scope="col">LINK</th>
                                                 <th scope="col">KATEGORI</th>
                                                 <th scope="col">LABEL</th>
                                                 <th scope="col">NOMOR</th>
@@ -101,14 +101,40 @@
             $.get(url, function(data) {
                 let rows = '';
                 data.data.forEach(function(kolMaster) {
+                    // Mengambil kategori yang di-assign dan menggabungkannya jika ada
+                    let assignCategories = kolMaster.assign_category && kolMaster.assign_category.length >
+                        0 ?
+                        kolMaster.assign_category.map(category => category.name).join(', ') :
+                        'No Category';
+
+                    // Menentukan warna berdasarkan status_call
+                    let statusClass = '';
+                    let statusLabel = kolMaster.status_call;
+
+                    switch (kolMaster.status_call) {
+                        case 'pending':
+                            statusClass = 'badge bg-warning'; // Kuning
+                            break;
+                        case 'response':
+                            statusClass = 'badge bg-success'; // Hijau
+                            break;
+                        case 'no_response':
+                            statusClass = 'badge bg-danger'; // Merah
+                            break;
+                    }
+
                     rows += `
                         <tr>
-                            <td>${kolMaster.unique_id}</td>
-                            <td>${kolMaster.nickname}</td>
-                            <td>${kolMaster.follower}</td>
-                            <td>${kolMaster.following}</td>
-                            <td>${kolMaster.like}</td>
-                            <td>${kolMaster.total_video}</td>
+                            <td>
+                                ${kolMaster.unique_id}
+                                <a href="https://tiktok.com/@${kolMaster.unique_id}" target="_blank">
+                                    <i class="fa fa-link" aria-hidden="true"></i>
+                                </a>
+                            </td>
+                            <td>${assignCategories}</td>
+                            <td><span class="${statusClass}">${statusLabel}</span></td>
+                            <td>${kolMaster.whatsapp_number}</td>
+                            <td><a href="https://wa.me/${kolMaster.whatsapp_number}" target="_blank">Chat Sekarang</a></td>
                             <td>${kolMaster.notes}</td>
                             <td>
                                 ${kolMaster.file_url ? 
@@ -123,6 +149,8 @@
                             </td>
                         </tr>`;
                 });
+
+
 
 
                 $('#table-kol').html(rows);

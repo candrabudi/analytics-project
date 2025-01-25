@@ -27,6 +27,7 @@ class KOLController extends Controller
                 $query->where('nickname', 'LIKE', "%$search%")
                     ->orWhere('unique_id', 'LIKE', "%$search%");
             })
+            ->with('assignCategory')
             ->paginate($perPage, ['*'], 'page', $page);
     
         // Menambahkan file_url dengan asset() ke dalam response data
