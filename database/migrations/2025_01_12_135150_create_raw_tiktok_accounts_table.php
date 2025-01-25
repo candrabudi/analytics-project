@@ -21,14 +21,11 @@ return new class extends Migration
             $table->integer('like')->default(0);
             $table->integer('total_video')->default(0);
             $table->integer('avg_views')->default(0);
-            $table->enum('tier', ['nano', 'micro', 'macro', 'mega'])->default('nano');
-            $table->integer('is_call')->default(0);
-            $table->string('city')->nullable();
-            $table->string('district')->nullable();
-            $table->string('village')->nullable();
-            $table->text('address')->nullable();
-            $table->integer('total_sales')->default(0);
-            $table->integer('total_views')->default(0);
+            $table->double('engagement_rate')->default(0);
+            $table->enum('status_call', ['pending', 'response', 'no_response'])->default('pending');
+            $table->string('whatsapp_number')->default(0)->nullable();
+            $table->string('notes')->default(0)->nullable();
+            $table->string('file')->default(0)->nullable();
             $table->timestamps();
         });
     }

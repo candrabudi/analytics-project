@@ -64,31 +64,31 @@
                         </ul>
                     </li>
                     <li class="slide">
-                        <a href="{{ route('kol.type_influencer') }}" class="side-menu__item">
+                        <a href="{{ route('kol.type_influencer') }}" class="side-menu__item {{ request()->is('/kol/type-influencer') ? 'active' : '' }}">
                             <i class="side-menu__icon ri-pages-line"></i>
-                            <span class="side-menu__label">Tipe Influencer</span>
+                            <span class="side-menu__label">Database Raw</span>
                         </a>
                     </li>
                     <li class="slide">
-                        <a href="{{ route('kol.management.index') }}" class="side-menu__item">
+                        <a href="{{ route('kol.management.index') }}" class="side-menu__item {{ request()->is('/kol/type-influencer') ? 'active' : '' }}">
                             <i class="side-menu__icon ri-article-line"></i>
                             <span class="side-menu__label">KOL Management</span>
                         </a>
                     </li>
                     <li class="slide">
-                        <a href="/scrap-engagement" class="side-menu__item">
+                        <a href="/scrap-engagement" class="side-menu__item {{ request()->is('/kol/progress-post') ? 'active' : '' }}">
                             <i class="side-menu__icon ri-send-plane-line"></i>
                             <span class="side-menu__label">Progress Post</span>
                         </a>
                     </li>
                     <li class="slide">
-                        <a href="/scrap-engagement" class="side-menu__item">
+                        <a href="/scrap-engagement" class="side-menu__item {{ request()->is('/kol/invoice') ? 'active' : '' }}">
                             <i class="side-menu__icon ri-file-chart-line"></i>
                             <span class="side-menu__label">Invoice Pembayaran</span>
                         </a>
                     </li>
                     <li class="slide">
-                        <a href="{{ route('kol.master') }}" class="side-menu__item">
+                        <a href="{{ route('kol.master') }}" class="side-menu__item {{ request()->is('/kol/master') ? 'active' : '' }}">
                             <i class="side-menu__icon ri-mastercard-line"></i>
                             <span class="side-menu__label">Database Master</span>
                         </a>

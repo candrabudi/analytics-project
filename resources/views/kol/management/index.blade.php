@@ -96,8 +96,12 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="pic_id" class="mb-3">PIC</label>
-                                <input type="text" class="form-control" name="pic_id" id="pic_id"
-                                    placeholder="Masukkan ID PIC">
+                                <select name="pic_id" id="pic_id" class="form-control">
+                                    <option value="">Pilih PIC</option>
+                                    @foreach ($picUsers as $pu)
+                                        <option value="{{ $pu->id }}">{{ $pu->username }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="row">

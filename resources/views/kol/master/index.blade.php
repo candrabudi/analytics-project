@@ -102,15 +102,15 @@
         function getBadgeClass(tier) {
             switch (tier.toLowerCase()) {
                 case 'nano':
-                    return 'bg-secondary-transparent'; // abu-abu
+                    return 'bg-secondary-transparent';
                 case 'micro':
-                    return 'bg-primary-transparent'; // biru
+                    return 'bg-primary-transparent';
                 case 'macro':
-                    return 'bg-warning-transparent'; // kuning
+                    return 'bg-warning-transparent';
                 case 'mega':
-                    return 'bg-danger-transparent'; // merah
+                    return 'bg-danger-transparent';
                 default:
-                    return 'light'; // default warna
+                    return 'light';
             }
         }
     

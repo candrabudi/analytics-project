@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\KolManagement;
 use App\Models\RawTiktokAccount;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,7 +14,9 @@ class KolManagementController extends Controller
     public function index()
     {
         $rawTikTokAccounts = RawTiktokAccount::all();
-        return view('kol.management.index', compact('rawTikTokAccounts'));
+        $picUsers = User::where('role', 'kol_pic')
+            ->get();
+        return view('kol.management.index', compact('rawTikTokAccounts', 'picUsers'));
     }
 
     public function list(Request $request)
@@ -44,7 +47,6 @@ class KolManagementController extends Controller
                 'target_views' => 'required|numeric',
                 'views_achieved' => 'required|numeric',
                 'status' => 'required|string',
-                'cpv' => 'required|numeric',
                 'deal_date' => 'required|date',
                 'deal_post' => 'required|numeric',
                 'notes' => 'nullable|string',
@@ -74,7 +76,6 @@ class KolManagementController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
-            // Penanganan kesalahan umum
             return response()->json([
                 'success' => false,
                 'message' => 'Something went wrong',

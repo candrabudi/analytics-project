@@ -107,6 +107,8 @@
                                     <th scope="col">FOLLOWERS</th>
                                     <th scope="col">TOTAL VIDEOS</th>
                                     <th scope="col">AVERAGE</th>
+                                    <th scope="col">TOTAL INTERACTIONS</th>
+                                    <th scope="col">ENGAGEMENT RATE</th>
                                 </tr>
                             </thead>
                             <tbody id="account-data-body">
@@ -306,6 +308,11 @@
                                                             return sum + (video.play_count || 0);
                                                         }, 0) / totalVideos;
 
+
+                                                        const totalInteractions = videosToConsider.reduce((sum, video) => {
+                                                            return sum + (video.digg_count || 0) + (video.comment_count || 0) + (video.share_count || 0);
+                                                        }, 0);
+
                                                         const existingAuthor = userInfoArray.find(
                                                             userInfo => userInfo.author_id ===
                                                             videosToConsider[0].author.id
@@ -348,7 +355,8 @@
                                                                     total_video: userInfoData.data
                                                                         .stats.videoCount,
                                                                     average: roundedAveragePlayCount,
-                                                                    category: category
+                                                                    category: category,
+                                                                    totalInteractions: totalInteractions
                                                                 });
 
                                                                 fetch(`/scrape-username/insert/account`, {
@@ -379,7 +387,8 @@
                                                                         like: heartCount,
                                                                         average: roundedAveragePlayCount,
                                                                         digg: diggCount,
-                                                                        tier: category
+                                                                        tier: category,
+                                                                        totalInteractions: totalInteractions
                                                                     })
                                                                 });
 
@@ -396,7 +405,8 @@
                                                                     total_video: videoCount,
                                                                     digg: diggCount,
                                                                     average: roundedAveragePlayCount,
-                                                                    category: category
+                                                                    category: category, 
+                                                                    totalInteractions: totalInteractions
                                                                 }]);
                                                             }
                                                         }
@@ -462,6 +472,7 @@
                     const nickname = checkbox.getAttribute('data-nickname');
                     const following = checkbox.getAttribute('data-following');
                     const like = checkbox.getAttribute('data-like');
+                    const totalInteractions = checkbox.getAttribute('data-total-interactions');
 
                     selectedData.push({
                         authorID: authorID,
@@ -473,6 +484,7 @@
                         nickname: nickname,
                         following: following,
                         like: like,
+                        totalInteractions: totalInteractions
                     });
                 });
 
@@ -527,6 +539,7 @@
                                 data-nickname="${userInfo.nickname}"
                                 data-like="${userInfo.like}"
                                 data-following="${userInfo.following}"
+                                data-total-interactions="${userInfo.totalInteractions}"
                             >
                         </td>
                         <td>${userInfo.category}</td>
@@ -534,6 +547,8 @@
                         <td>${numberFormatter.format(userInfo.follower)}</td>
                         <td>${numberFormatter.format(userInfo.total_video)}</td>
                         <td>${numberFormatter.format(userInfo.average)}</td>
+                        <td>${numberFormatter.format(userInfo.totalInteractions)}</td>
+                        <td>${userInfo.average ? ((userInfo.totalInteractions / userInfo.average) * 100).toFixed(2) : 'N/A'}%</td>
                     `;
                     accountDataBody.appendChild(newRow);
                 });
