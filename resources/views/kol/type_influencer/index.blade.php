@@ -33,10 +33,14 @@
                         <div class="card custom-card">
                             <div class="card-header justify-content-between">
                                 <div class="card-title" id="kol-title">KOL ALL</div>
-                                <div>
-                                    <input class="form-control form-control-sm" id="searchInput" type="text" placeholder="Search Here">
+                                <div class="d-flex align-items-center w-80">
+                                    <input class="form-control form-control-sm me-2 w-200" id="searchInput" type="text" placeholder="Search Here">
+                                    <button class="btn btn-success btn-sm w-100" data-bs-toggle="modal" data-bs-target="#addDataModal">
+                                        Tambah Data
+                                    </button>
                                 </div>
                             </div>
+                                                        
                             <div class="card-body p-0">
                                 <div class="table-responsive">
                                     <table class="table text-nowrap">
@@ -68,6 +72,29 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addDataModal" tabindex="-1" aria-labelledby="addDataModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addDataModalLabel">Tambah Database Raw</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addDataForm">
+                        <div class="mb-3">
+                            <label for="kolName" class="form-label">Userame Akun Tiktok</label>
+                            <input type="text" class="form-control" id="kolName" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="saveDataBtn">Save Data</button>
                 </div>
             </div>
         </div>
