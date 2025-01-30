@@ -44,7 +44,7 @@
                     </a>
                 </li>
 
-                @if (Auth::user()->role == 'admin' || Auth::user()->role == 'kol')
+                @if (Auth::user()->role == 'admin' || Auth::user()->role == 'kol' || Auth::user()->role == 'kol_pic')
                     <li class="slide__category"><span class="category-name">KOL</span></li>
                     <li class="slide has-sub open">
                         <a href="javascript:void(0);" class="side-menu__item">
@@ -157,6 +157,12 @@
                 @if (Auth::user()->role == 'admin')
                     <li class="slide__category">
                         <span class="category-name">Pengaturan</span>
+                    </li>
+                    <li class="slide">
+                        <a href="{{ route('warehouses.index') }}" class="side-menu__item">
+                            <i class="side-menu__icon ri-database-2-line"></i>
+                            <span class="side-menu__label">Management Warehouses</span>
+                        </a>
                     </li>
                     <li class="slide">
                         <a href="/users" class="side-menu__item">

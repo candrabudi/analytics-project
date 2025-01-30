@@ -62,6 +62,7 @@
                             <select class="form-select" id="role" name="role">
                                 <option value="admin">Admin</option>
                                 <option value="kol">Kol</option>
+                                <option value="kol_pic">Kol Pic</option>
                                 <option value="advertiser">Advertiser</option>
                                 <option value="user" selected>User</option>
                             </select>
@@ -97,6 +98,7 @@
                             <select class="form-select" id="update-role" name="role">
                                 <option value="admin">Admin</option>
                                 <option value="kol">Kol</option>
+                                <option value="kol_pic">Kol Pic</option>
                                 <option value="advertiser">Advertiser</option>
                                 <option value="user">User</option>
                             </select>
@@ -277,7 +279,7 @@
                 $('#users-table-body').hide();
 
                 $.ajax({
-                    url: '/users',
+                    url: '/users/list',
                     method: 'GET',
                     success: function(response) {
                         var rows = '';

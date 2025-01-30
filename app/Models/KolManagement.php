@@ -13,4 +13,10 @@ class KolManagement extends Model
     {
         return $this->hasOne(RawTiktokAccount::class, 'id', 'raw_tiktok_account_id');
     }
+
+    public function assignCategory()
+    {
+        return $this->hasMany(AssignTiktokCategory::class, 'raw_tiktok_account_id', 'raw_tiktok_account_id')
+            ->join('tiktok_categories as tc', 'tc.id', '=', 'assign_tiktok_categories.tiktok_category_id');
+    }
 }

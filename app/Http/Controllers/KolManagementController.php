@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\KolManagement;
+use App\Models\Province;
 use App\Models\RawTiktokAccount;
+use App\Models\Regency;
 use App\Models\User;
+use App\Models\Village;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 class KolManagementController extends Controller
@@ -24,13 +29,33 @@ class KolManagementController extends Controller
         $page = $request->input('page', 1);
         $perPage = $request->input('perPage', 10);
         $search = $request->input('search', '');
-
+        
+        $startDate = $request->input('start_date');
+        if(!$startDate) {
+            $startDate = Carbon::now()->startOfMonth()->toDateString();
+        }
+        $endDate = $request->input('end_date');
+        if(!$endDate) {
+            $endDate = Carbon::now()->endOfMonth()->toDateString();
+        }
         $kols = KolManagement::when($search, function ($query) use ($search) {
                 $query->where('nickname', 'LIKE', "%$search%")
                     ->orWhere('unique_id', 'LIKE', "%$search%");
             })
-            ->with('rawTiktokAccount')
+            ->whereDate('created_at', '>=', $startDate)
+            ->whereDate('created_at', '<=', $endDate)
+            ->with('rawTiktokAccount', 'assignCategory')
             ->paginate($perPage, ['*'], 'page', $page);
+
+        return response()->json($kols);
+    }
+    
+    
+    public function edit($a)
+    {
+        $kols = KolManagement::where('id', $a)
+            ->with('rawTiktokAccount', 'assignCategory')
+            ->first();
 
         return response()->json($kols);
     }
@@ -45,8 +70,6 @@ class KolManagementController extends Controller
                 'ratecard_kol' => 'required|numeric',
                 'ratecard_deal' => 'required|numeric',
                 'target_views' => 'required|numeric',
-                'views_achieved' => 'required|numeric',
-                'status' => 'required|string',
                 'deal_date' => 'required|date',
                 'deal_post' => 'required|numeric',
                 'notes' => 'nullable|string',
@@ -68,7 +91,8 @@ class KolManagementController extends Controller
             $store->ratecard_kol = $request->input('ratecard_kol');
             $store->ratecard_deal = $request->input('ratecard_deal');
             $store->target_views = $request->input('target_views');
-            $store->status = $request->input('status');
+            // $store->status = $request->input('status');
+            $store->status = 'pending';
             $store->deal_date = $request->input('deal_date');
             $store->deal_post = $request->input('deal_post');
             $store->notes = $request->input('notes');
@@ -81,6 +105,58 @@ class KolManagementController extends Controller
                 'message' => 'Something went wrong',
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    public function approve(Request $request) 
+    {
+        $a = $request->id;
+        $kolManagement = KolManagement::where('id', $a)
+            ->where('status', 'pending')
+            ->first();
+        if($kolManagement) {
+            $kolManagement->status = 'approved';
+            $kolManagement->save();
+
+            return response()
+                ->json([
+                    'status' => 'success',
+                    'code' => 200, 
+                    'message' => 'success approve data'
+                ], 200);
+        }else{
+            return response()
+                ->json([
+                    'status' => 'success',
+                    'code' => 400, 
+                    'message' => 'failed approve data'
+                ], 400);
+        }
+    }
+    
+    public function reject(Request $request) 
+    {
+        $a = $request->id;
+        $kolManagement = KolManagement::where('id', $a)
+            ->where('status', 'pending')
+            ->first();
+        if($kolManagement) {
+            $kolManagement->status = 'rejected';
+            $kolManagement->save();
+
+            return response()
+                ->json([
+                    'status' => 'success',
+                    'code' => 200, 
+                    'message' => 'success rejected data'
+                ], 200);
+        }else{
+            return response()
+                ->json([
+                    'status' => 'success',
+                    'code' => 400, 
+                    'message' => 'failed rejected data'
+                ], 400);
         }
     }
 }

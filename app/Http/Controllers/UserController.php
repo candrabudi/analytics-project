@@ -27,7 +27,7 @@ class UserController extends Controller
         $request->validate([
             'username' => 'required|string|max:255',
             'password' => 'required|string|min:8',
-            'role' => 'required|string|in:admin,kol,advertiser,user',
+            'role' => 'required|string|in:admin,kol,kol_pic,advertiser,user',
         ]);
 
         // Create a new user
@@ -37,7 +37,7 @@ class UserController extends Controller
             'role' => $request->role,
         ]);
 
-        return response()->json($user, 201);  // 201 Created
+        return response()->json($user, 201);
     }
 
     // Show details of a specific user

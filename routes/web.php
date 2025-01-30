@@ -13,6 +13,7 @@ use App\Http\Controllers\ScrapeEngagementController;
 use App\Http\Controllers\ScrapeUsernameController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserManagementController;
+use App\Http\Controllers\WarehouseController;
 use App\Models\KolManagement;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/advertiser/dashboard/data-campaign', [AdvertiserController::class, 'getDataCampaign'])->name('advertiser.dashboard.getDataCampaign');
 
     Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users/list', [UserController::class, 'list']);
     Route::get('/users/edit/{id}', [UserController::class, 'edit']);
     Route::post('/users', [UserController::class, 'store']);
     Route::post('/users/update/{id}', [UserController::class, 'update']);
@@ -101,10 +103,33 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('/kol/type-influencer', [KOLController::class, 'typeInfluencer'])->name('kol.type_influencer');
+    Route::post('/kol/type-influencer/scrape-username', [KOLController::class, 'scrapeUsernameDatabaseRaw'])->name('kol.type_influencer.scrapeusername');
     Route::get('/kol/type-influencer/edit/{a}', [KOLController::class, 'editDatabaseRaw'])->name('kol.type_influencer.edit');
     Route::post('/kol/type-influencer/update/{a}', [KOLController::class, 'updateDatabaseRaw'])->name('kol.type_influencer.update');
 
     Route::get('/kol/management', [KolManagementController::class, 'index'])->name('kol.management.index');
+    Route::get('/kol/management/edit/{a}', [KolManagementController::class, 'edit'])->name('kol.management.edit');
+    Route::post('/kol/management/approve', [KolManagementController::class, 'approve'])->name('kol.management.approve');
+    Route::post('/kol/management/reject', [KolManagementController::class, 'reject'])->name('kol.management.reject');
     Route::get('/kol/management/list', [KolManagementController::class, 'list'])->name('kol.management.list');
     Route::post('/kol/management/store', [KolManagementController::class, 'store'])->name('kol.management.store');
+    Route::post('/kol/master/update-field', [KolController::class, 'updateField'])->name('kol.updateField');
+
+
+
+    Route::get('warehouses', [WarehouseController::class, 'index'])->name('warehouses.index');
+    Route::get('warehouses/load', [WarehouseController::class, 'load'])->name('warehouses.load');
+    
+    Route::get('warehouses/create', [WarehouseController::class, 'create'])->name('warehouses.create');
+    Route::post('warehouses', [WarehouseController::class, 'store'])->name('warehouses.store');
+    
+    Route::get('warehouses/edit/{id}', [WarehouseController::class, 'edit'])->name('warehouses.edit');
+    Route::put('warehouses/update/{id}', [WarehouseController::class, 'update'])->name('warehouses.update');
+    
+    Route::post('warehouses/destroy/{id}', [WarehouseController::class, 'destroy'])->name('warehouses.destroy');
+    
+    Route::get('get-regencies/{province_id}', [WarehouseController::class, 'getRegencies'])->name('get.regencies');
+    Route::get('get-districts/{regency_id}', [WarehouseController::class, 'getDistricts'])->name('get.districts');
+    Route::get('get-villages/{district_id}', [WarehouseController::class, 'getVillages'])->name('get.villages');
+    
 });

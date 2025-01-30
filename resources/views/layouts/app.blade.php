@@ -27,20 +27,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#raw_tiktok_account_id').select2({
-                placeholder: "Pilih salah satu...",
-                allowClear: true,
-                dropdownParent: $('#staticBackdrop')
-            });
-    
-            // Adjust z-index to make sure it works inside modal
-            $('#raw_tiktok_account_id').on('select2:open', function() {
-                $('.select2-container--open').css('z-index', 999999999);
-            });
-        });
-    </script>
     
 
     <style>
