@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bank;
 use App\Models\KolManagement;
 use App\Models\Province;
 use App\Models\RawTiktokAccount;

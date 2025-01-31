@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('tiktok_invoices', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('kol_management_id');
-            $table->bigInteger('bank_id');
+            $table->unsignedBigInteger('raw_tiktok_account_id');
+            $table->unsignedBigInteger('kol_management_id');
+            $table->unsignedBigInteger('bank_id');
             $table->bigInteger('account_name');
             $table->bigInteger('account_number');
+            $table->string('file_upload')->nullable();
             $table->timestamps();
         });
     }

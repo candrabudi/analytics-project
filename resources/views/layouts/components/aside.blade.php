@@ -78,6 +78,12 @@
                     <li class="slide">
                         <a href="/scrap-engagement" class="side-menu__item {{ request()->is('/kol/progress-post') ? 'active' : '' }}">
                             <i class="side-menu__icon ri-send-plane-line"></i>
+                            <span class="side-menu__label">Shipment</span>
+                        </a>
+                    </li>
+                    <li class="slide">
+                        <a href="/scrap-engagement" class="side-menu__item {{ request()->is('/kol/progress-post') ? 'active' : '' }}">
+                            <i class="side-menu__icon ri-send-plane-line"></i>
                             <span class="side-menu__label">Progress Post</span>
                         </a>
                     </li>

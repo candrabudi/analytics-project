@@ -8,6 +8,7 @@ use App\Http\Controllers\GeneralSettingController;
 use App\Http\Controllers\KOLController;
 use App\Http\Controllers\KolManagementController;
 use App\Http\Controllers\KolMasterController;
+use App\Http\Controllers\KolShipmentController;
 use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\ScrapeEngagementController;
 use App\Http\Controllers\ScrapeUsernameController;
@@ -119,17 +120,23 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('warehouses', [WarehouseController::class, 'index'])->name('warehouses.index');
     Route::get('warehouses/load', [WarehouseController::class, 'load'])->name('warehouses.load');
-    
     Route::get('warehouses/create', [WarehouseController::class, 'create'])->name('warehouses.create');
     Route::post('warehouses', [WarehouseController::class, 'store'])->name('warehouses.store');
-    
     Route::get('warehouses/edit/{id}', [WarehouseController::class, 'edit'])->name('warehouses.edit');
     Route::put('warehouses/update/{id}', [WarehouseController::class, 'update'])->name('warehouses.update');
-    
     Route::post('warehouses/destroy/{id}', [WarehouseController::class, 'destroy'])->name('warehouses.destroy');
     
     Route::get('get-regencies/{province_id}', [WarehouseController::class, 'getRegencies'])->name('get.regencies');
     Route::get('get-districts/{regency_id}', [WarehouseController::class, 'getDistricts'])->name('get.districts');
     Route::get('get-villages/{district_id}', [WarehouseController::class, 'getVillages'])->name('get.villages');
+
+
+    Route::get('kol/shipments', [KolShipmentController::class, 'index'])->name('kol_shipments.index');
+    Route::get('kol/shipments/load', [KolShipmentController::class, 'load'])->name('kol_shipments.load');
+    Route::get('kol/shipments/create', [KolShipmentController::class, 'create'])->name('kol_shipments.create');
+    Route::post('kol/shipments', [KolShipmentController::class, 'store'])->name('kol_shipments.store');
+    Route::get('kol/shipments/edit/{id}', [KolShipmentController::class, 'edit'])->name('kol_shipments.edit');
+    Route::put('kol/shipments/update/{id}', [KolShipmentController::class, 'update'])->name('kol_shipments.update');
+    Route::post('kol/shipments/destroy/{id}', [KolShipmentController::class, 'destroy'])->name('kol_shipments.destroy');
     
 });
