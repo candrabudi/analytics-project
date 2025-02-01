@@ -76,7 +76,7 @@
                         </a>
                     </li>
                     <li class="slide">
-                        <a href="/scrap-engagement" class="side-menu__item {{ request()->is('/kol/progress-post') ? 'active' : '' }}">
+                        <a href="{{ route('kol_shipments.index') }}" class="side-menu__item {{ request()->is('/kol/progress-post') ? 'active' : '' }}">
                             <i class="side-menu__icon ri-send-plane-line"></i>
                             <span class="side-menu__label">Shipment</span>
                         </a>
@@ -88,7 +88,7 @@
                         </a>
                     </li>
                     <li class="slide">
-                        <a href="/scrap-engagement" class="side-menu__item {{ request()->is('/kol/invoice') ? 'active' : '' }}">
+                        <a href="{{ route('kol_invoices.index') }}" class="side-menu__item {{ request()->is('/kol/invoice') ? 'active' : '' }}">
                             <i class="side-menu__icon ri-file-chart-line"></i>
                             <span class="side-menu__label">Invoice Pembayaran</span>
                         </a>
