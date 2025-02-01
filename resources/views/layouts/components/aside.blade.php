@@ -167,7 +167,7 @@
                     <li class="slide">
                         <a href="{{ route('warehouses.index') }}" class="side-menu__item">
                             <i class="side-menu__icon ri-database-2-line"></i>
-                            <span class="side-menu__label">Management Warehouses</span>
+                            <span class="side-menu__label">Management Warehouse</span>
                         </a>
                     </li>
                     <li class="slide">

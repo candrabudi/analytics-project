@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DatabaseRawController;
 use App\Http\Controllers\GeneralSettingController;
 use App\Http\Controllers\KOLController;
+use App\Http\Controllers\KolInvoiceController;
 use App\Http\Controllers\KolManagementController;
 use App\Http\Controllers\KolMasterController;
 use App\Http\Controllers\KolShipmentController;
@@ -138,5 +139,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('kol/shipments/edit/{id}', [KolShipmentController::class, 'edit'])->name('kol_shipments.edit');
     Route::put('kol/shipments/update/{id}', [KolShipmentController::class, 'update'])->name('kol_shipments.update');
     Route::post('kol/shipments/destroy/{id}', [KolShipmentController::class, 'destroy'])->name('kol_shipments.destroy');
+
+
+    Route::get('kol/invoices', [KolInvoiceController::class, 'index'])->name('kol_invoices.index');
+    Route::get('kol/invoices/load', [KolInvoiceController::class, 'load'])->name('kol_invoices.load');
+    Route::get('kol/invoices/create', [KolInvoiceController::class, 'create'])->name('kol_invoices.create');
+    Route::post('kol/invoices', [KolInvoiceController::class, 'store'])->name('kol_invoices.store');
+    Route::get('kol/invoices/edit/{id}', [KolInvoiceController::class, 'edit'])->name('kol_invoices.edit');
+    Route::put('kol/invoices/update/{id}', [KolInvoiceController::class, 'update'])->name('kol_invoices.update');
+    Route::post('kol/invoices/destroy/{id}', [KolInvoiceController::class, 'destroy'])->name('kol_invoices.destroy');
     
 });
