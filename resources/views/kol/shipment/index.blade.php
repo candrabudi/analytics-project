@@ -30,7 +30,7 @@
                         <div>
                             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                                 data-bs-target="#createModal">
-                                Tambah Gudang
+                                Tambah Pengiriman
                             </button>
                         </div>
                     </div>
