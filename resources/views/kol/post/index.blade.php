@@ -159,7 +159,6 @@
                         @csrf
                         @method('PUT')
 
-                        <!-- Field KOL Management -->
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <label for="editKolManagementId" class="form-label">KOL Management</label>
@@ -175,7 +174,6 @@
                             </div>
                         </div>
 
-                        <!-- Field Judul dan Link Post -->
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="editTitle" class="form-label">Judul</label>
@@ -187,7 +185,6 @@
                             </div>
                         </div>
 
-                        <!-- Field Deadline dan Target Views -->
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="editDeadline" class="form-label">Deadline</label>
@@ -200,7 +197,6 @@
                             </div>
                         </div>
 
-                        <!-- Field Brief -->
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <label for="editBrief" class="form-label">Brief</label>
@@ -208,7 +204,6 @@
                             </div>
                         </div>
 
-                        <!-- Tombol Update -->
                         <button type="submit" class="btn btn-primary">Update</button>
                     </form>
                 </div>

@@ -281,7 +281,8 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="edit_notes" class="mb-3">Notes</label>
-                            <textarea class="form-control" name="notes" id="edit_notes" rows="3" placeholder="Tambahkan catatan jika ada"></textarea>
+                            <textarea class="form-control" name="notes" id="edit_notes" rows="3"
+                                placeholder="Tambahkan catatan jika ada"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -413,11 +414,11 @@
                             kolData.assign_category.map(category =>
                                 `<span class="badge bg-secondary">${category.name}</span>`
                             ).join(' ') : 'No Category';
-
+                        const formattedDate = formatDate(kolData.created_at);
                         rows += `
                         <tr>
                             <td class="freeze-col freeze-col-1">
-                                ${new Date(kolData.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                ${formattedDate}
                             </td>
                             <td class="freeze-col freeze-col-2">${kolData.raw_tiktok_account.unique_id}</td>
                             <td class="freeze-col freeze-col-3">
@@ -500,7 +501,7 @@
                         // Kirim data ke server untuk disimpan
                         $.ajax({
                             url: '/kol/' +
-                            kolId, // URL API untuk update data KOL berdasarkan ID
+                                kolId, // URL API untuk update data KOL berdasarkan ID
                             method: 'PUT',
                             data: formData,
                             success: function(response) {
@@ -568,6 +569,18 @@
                     });
 
                 });
+            }
+
+            function formatDate(datetime) {
+                const date = new Date(datetime);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                const seconds = String(date.getSeconds()).padStart(2, '0');
+
+                return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
             }
 
             function getBadgeClass(status) {
