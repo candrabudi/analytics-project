@@ -186,10 +186,17 @@
                                 </select>
                             </div>
                         </div>
-
-                        <div class="mb-3">
-                            <label for="notes" class="form-label">Catatan</label>
-                            <textarea name="notes" class="form-control" id="notes"></textarea>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="shipping_cost" class="form-label">Ongkir</label>
+                                <input type="number" class="form-control" id="shipping_cost" name="shipping_cost"
+                                    required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="notes" class="form-label">Catatan</label>
+                                <textarea name="notes" class="form-control" id="notes"></textarea>
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Simpan</button>
@@ -328,18 +335,21 @@
             $('#kol_management_id').select2({
                 placeholder: 'Pilih KOL Management',
                 allowClear: true,
-                dropdownParent: $('.col-md-6')
+                dropdownParent: $('#kol_management_id').parent() // Lebih spesifik
             });
-
-            $('.select2-dropdown').css('z-index', '999999');
+    
+            // Mengatur z-index saat dropdown dibuka
+            $('#kol_management_id').on('select2:open', function (e) {
+                $('.select2-dropdown').css('z-index', '999999');
+            });
         });
     </script>
-
+    
     <style>
         .select2-container {
             position: relative;
         }
-
+    
         .select2-dropdown {
             z-index: 999999 !important;
         }

@@ -70,7 +70,6 @@ class KolManagementController extends Controller
                 'platform' => 'required|string',
                 'ratecard_kol' => 'required|numeric',
                 'ratecard_deal' => 'required|numeric',
-                'target_views' => 'required|numeric',
                 'deal_date' => 'required|date',
                 'deal_post' => 'required|numeric',
                 'notes' => 'nullable|string',
@@ -91,8 +90,7 @@ class KolManagementController extends Controller
             $store->platform = $request->input('platform');
             $store->ratecard_kol = $request->input('ratecard_kol');
             $store->ratecard_deal = $request->input('ratecard_deal');
-            $store->target_views = $request->input('target_views');
-            // $store->status = $request->input('status');
+            $store->target_views =  $request->input('ratecard_deal') / 10;
             $store->status = 'pending';
             $store->deal_date = $request->input('deal_date');
             $store->deal_post = $request->input('deal_post');

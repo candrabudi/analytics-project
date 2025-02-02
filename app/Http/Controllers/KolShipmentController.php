@@ -50,7 +50,7 @@ class KolShipmentController extends Controller
 
     public function store(Request $request)
     {
-        if (!$request->has(['kol_management_id', 'shipping_provider_id', 'warehouse_id', 'shipment_number', 'receiver_name', 'province_id', 'regency_id', 'district_id', 'village_id', 'destination_address', 'shipment_date', 'status'])) {
+        if (!$request->has(['kol_management_id', 'shipping_provider_id', 'warehouse_id', 'shipment_number', 'receiver_name', 'province_id', 'regency_id', 'district_id', 'village_id', 'destination_address', 'shipment_date', 'shipping_cost', 'status'])) {
             return redirect()->back()->withErrors('Semua field wajib diisi.');
         }
 
@@ -99,6 +99,7 @@ class KolShipmentController extends Controller
             'village_id' => $request->village_id,
             'destination_address' => $request->destination_address,
             'shipment_date' => $request->shipment_date,
+            'shipping_cost' => $request->shipping_cost,
             'status' => $request->status,
             'notes' => $request->notes
         ]);

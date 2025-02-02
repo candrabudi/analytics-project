@@ -267,11 +267,6 @@
                                 <input type="number" class="form-control" name="ratecard_deal" id="edit_ratecard_deal"
                                     placeholder="Masukkan ratecard deal">
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="edit_target_views" class="mb-3">Target Views</label>
-                                <input type="number" class="form-control" name="target_views" id="edit_target_views"
-                                    placeholder="Masukkan target views">
-                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -286,8 +281,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="edit_notes" class="mb-3">Notes</label>
-                            <textarea class="form-control" name="notes" id="edit_notes" rows="3"
-                                placeholder="Tambahkan catatan jika ada"></textarea>
+                            <textarea class="form-control" name="notes" id="edit_notes" rows="3" placeholder="Tambahkan catatan jika ada"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">

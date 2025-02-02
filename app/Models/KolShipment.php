@@ -22,6 +22,7 @@ class KolShipment extends Model
         'village_id',
         'destination_address',
         'shipment_date',
+        'shipping_cost',
         'status',
         'notes'
     ];

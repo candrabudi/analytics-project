@@ -13,6 +13,7 @@ use App\Http\Controllers\KolShipmentController;
 use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\ScrapeEngagementController;
 use App\Http\Controllers\ScrapeUsernameController;
+use App\Http\Controllers\TiktokPostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\WarehouseController;
@@ -148,5 +149,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('kol/invoices/edit/{id}', [KolInvoiceController::class, 'edit'])->name('kol_invoices.edit');
     Route::put('kol/invoices/update/{id}', [KolInvoiceController::class, 'update'])->name('kol_invoices.update');
     Route::post('kol/invoices/destroy/{id}', [KolInvoiceController::class, 'destroy'])->name('kol_invoices.destroy');
+
+
+    Route::get('kol/progress/posts', [TiktokPostController::class, 'index'])->name('kol_progress_posts.index');
+    Route::get('kol/progress/posts', [TiktokPostController::class, 'index'])->name('kol_progress_posts.index');
+    Route::get('kol/progress/posts/load', [TiktokPostController::class, 'load'])->name('kol_progress_posts.load');
+    Route::get('kol/progress/posts/create', [TiktokPostController::class, 'create'])->name('kol_progress_posts.create');
+    Route::post('kol/progress/posts', [TiktokPostController::class, 'store'])->name('kol_progress_posts.store');
+    Route::get('kol/progress/posts/edit/{id}', [TiktokPostController::class, 'edit'])->name('kol_progress_posts.edit');
+    Route::put('kol/progress/posts/update/{id}', [TiktokPostController::class, 'update'])->name('kol_progress_posts.update');
+    Route::post('kol/progress/posts/destroy/{id}', [TiktokPostController::class, 'destroy'])->name('kol_progress_posts.destroy');
     
 });
