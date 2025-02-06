@@ -36,6 +36,8 @@ Route::get('/', [AuthController::class, 'login']);
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login/process', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout']);
+Route::get('/meta-api/get-facebook-data', [AdvertiserController::class, 'getFacebookData']);
+Route::get('/meta-api/get-facebook-data/view', [AdvertiserController::class, 'getFacebookDataView']);
 
 Route::get('/check-login', function () {
     return response()->json(['loggedIn' => Auth::user() ? true : false]);

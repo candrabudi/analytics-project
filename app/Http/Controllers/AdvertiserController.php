@@ -7,6 +7,8 @@ use App\Models\DataRaw;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 
 class AdvertiserController extends Controller
 {
@@ -14,6 +16,157 @@ class AdvertiserController extends Controller
     {
         return view('advertiser.dashboard');
     }
+
+   
+    public function getFacebookData(Request $request)
+    {
+        $accessToken = 'EAAVQkiBTycIBOxMRGcBszXvoh4ekZBi5Hppu7ZC0LPbyAFZAxgJpzHWOckbOSkisSX2n6QvKZCXhcR6IXVgZACXACxcmME3DZCfAEOSeHcXMszXCBTHHr5Y8L2pcUh1bP7ZCp70SZBo2ZC2dCezJilmcDjCwZA7ZC8QnJZBlCzlDt23RoQXhuJitMesVzj3ZAep2eu9nFoatlvoYDq1wru5zyXgZDZD'; // Mengambil access token dari .env
+        $startDate = $request->query('start_date', '2025-02-05'); // Tanggal default
+        $endDate = $request->query('end_date', '2025-02-05');     // Tanggal default
+        $actId = $request->query('act_', '1938320656550699');     // ID akun iklan default
+    
+        // Membentuk URL berdasarkan permintaan
+        $url = "https://graph.facebook.com/v22.0/act_" . $actId .
+            "?fields=account_id,amount_spent,account_status,name,business," .
+            "insights.limit(10).time_range({'since':'" . $startDate . "','until':'" . $endDate . "'})" .
+            "{clicks,impressions,spend,reach,date_start,actions,cost_per_action_type}" .
+            "&access_token=" . $accessToken;
+    
+        // Menggunakan cURL untuk mengirimkan request ke Facebook Graph API
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        
+        // Eksekusi cURL dan simpan respons
+        $response = curl_exec($ch);
+    
+        // Cek apakah ada error
+        if (curl_errno($ch)) {
+            $errorMessage = curl_error($ch);
+            curl_close($ch);
+            return response()->json(['error' => 'Failed to fetch insights data', 'details' => $errorMessage], 500);
+        }
+    
+        // Tutup cURL
+        curl_close($ch);
+    
+        // Konversi respons menjadi array
+        $responseData = json_decode($response, true);
+    
+        // Jika respons sukses, kembalikan data dalam format JSON
+        if ($responseData) {
+            return response()->json($responseData);
+        }
+    
+        // Jika gagal, kembalikan pesan error
+        return response()->json(['error' => 'Failed to fetch insights data', 'details' => $response], 500);
+    }
+
+
+    public function getFacebookDataView(Request $request)
+{
+    $accessToken = 'EAAVQkiBTycIBO9gkd4zdxuUcyJsCkoRZBZAs3XTk9xUwSULvjubG1XZAIT6pwCu0juQzj29pem5RZB1EHEIjiXIjwVPZCreHi9DLyVS5VsOPvJNJtrH0rDBvsPXsF41ZCkpZChjiuftC3rpHMMXbScFh3AmGowGzZBdYJnizUlx6csMYlfunvUDcRY8uSyfsBtj2e78pRBidvcbapcnVAQZDZD';
+    $startDate = $request->query('start_date', now()->toDateString());
+    $endDate = $request->query('end_date', now()->toDateString());
+    $actIdsFilter = $request->query('act_');
+
+    $cacheKey = 'facebook_ad_accounts';
+    $cacheDuration = 60; // Cache 1 jam
+
+    $accountData = Cache::remember($cacheKey, $cacheDuration, function () use ($accessToken) {
+        $url = "https://graph.facebook.com/v22.0/me/adaccounts?fields=account_id,name,amount_spent&limit=500&access_token=" . $accessToken;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $accountData = json_decode($response, true);
+        $actIds = [];
+
+        if (isset($accountData['data'])) {
+            foreach ($accountData['data'] as $account) {
+                $actIds[] = [
+                    'name' => $account['name'],
+                    'account_id' => $account['account_id']
+                ];
+            }
+        }
+
+        return $actIds;
+    });
+
+    $actIds = $accountData;
+
+    // Jika tidak ada filter dari user, gunakan semua account_id dari API
+    if (!$actIdsFilter) {
+        $actIdsFilter = array_column($actIds, 'account_id');
+    }
+
+    $allAccountData = [];
+
+    foreach ($actIdsFilter as $actId) {
+        $url = "https://graph.facebook.com/v22.0/act_" . $actId . "?fields=account_id,name,insights.time_range({'since':'" . $startDate . "','until':'" . $endDate . "'}){clicks,impressions,spend,reach,date_start,actions,cost_per_action_type}&access_token=" . $accessToken;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            curl_close($ch);
+            continue;
+        }
+
+        curl_close($ch);
+        $responseData = json_decode($response, true);
+
+        if (isset($responseData['insights']['data'])) {
+            foreach ($responseData['insights']['data'] as $insight) {
+                $addToCart = 0;
+                $costAddToCart = 0;
+
+                if (isset($insight['actions'])) {
+                    foreach ($insight['actions'] as $action) {
+                        if ($action['action_type'] === 'add_to_cart') {
+                            $addToCart = $action['value'] ?? 0;
+                        }
+                    }
+                }
+
+                if (isset($insight['cost_per_action_type'])) {
+                    foreach ($insight['cost_per_action_type'] as $cost) {
+                        if ($cost['action_type'] === 'add_to_cart') {
+                            $costAddToCart = $cost['value'] ?? 0;
+                        }
+                    }
+                }
+
+                $allAccountData[] = [
+                    'date' => $insight['date_start'] ?? 'N/A',
+                    'platform' => 'Facebook',
+                    'account_name' => $responseData['name'] ?? 'Unknown',
+                    'impressions' => $insight['impressions'] ?? 0,
+                    'clicks' => $insight['clicks'] ?? 0,
+                    'spend' => $insight['spend'] ?? 0,
+                    'add_to_cart' => $addToCart,
+                    'cost_add_to_cart' => $costAddToCart,
+                ];
+            }
+        }
+    }
+
+    return view('advertiser.meta', [
+        'allAccountData' => $allAccountData,
+        'startDate' => $startDate,
+        'endDate' => $endDate,
+        'actIds' => $actIds
+    ]);
+}
+
+    
+    
 
     public function getCardData(Request $request)
     {
