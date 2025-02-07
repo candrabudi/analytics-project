@@ -116,24 +116,21 @@ class KolShipmentController extends Controller
 
     public function update(Request $request, $id)
     {
+        // return $request;
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'province_id' => 'required|exists:provinces,id',
             'regency_id' => 'required|exists:regencies,id',
             'district_id' => 'required|exists:districts,id',
             'village_id' => 'required|exists:villages,id',
-            'address_detail' => 'required'
+            'address_detail' => 'required',
+            'shipment_number' => 'nullable'
         ]);
 
         $warehouse = KolShipment::findOrFail($id);
         $warehouse->update($validated);
 
-        return response()
-            ->json([
-                'status' => 'success', 
-                'code' => 200, 
-                'message' => 'Success update data'
-            ]);
+        return redirect()->back();
     }
 
     public function destroy($id)

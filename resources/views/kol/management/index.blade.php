@@ -153,7 +153,7 @@
                                         </td>
                                         <td>
                                             @if ($kolManagement->kolShipment)
-                                                {{ $kolManagement->kolShipment->status }}
+                                                <span class="badge bg-success text-dark">{{ $kolManagement->kolShipment->status }}</span>
                                             @else
                                                 <button type="button" class="btn btn-primary btn-sm openModal"
                                                     data-id="{{ $kolManagement->id }}"
