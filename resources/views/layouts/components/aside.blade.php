@@ -120,6 +120,13 @@
                             <span class="side-menu__label">Meta Report</span>
                         </a>
                     </li>
+                    
+                    <li class="slide">
+                        <a href="/meta-api/get-facebook-data/view" class="side-menu__item">
+                            <i class="side-menu__icon ri-meta-line"></i>
+                            <span class="side-menu__label">Meta Api</span>
+                        </a>
+                    </li>
 
                     <li class="slide has-sub open">
                         <a href="javascript:void(0);" class="side-menu__item">
