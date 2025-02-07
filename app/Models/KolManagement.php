@@ -14,6 +14,16 @@ class KolManagement extends Model
         return $this->hasOne(RawTiktokAccount::class, 'id', 'raw_tiktok_account_id');
     }
 
+    public function kolShipment()
+    {
+        return $this->hasOne(KolShipment::class, 'kol_management_id', 'id');
+    }
+
+    public function tiktokInvoice()
+    {
+        return $this->hasOne(TiktokInvoice::class, 'kol_management_id', 'id');
+    }
+
     public function assignCategory()
     {
         return $this->hasMany(AssignTiktokCategory::class, 'raw_tiktok_account_id', 'raw_tiktok_account_id')

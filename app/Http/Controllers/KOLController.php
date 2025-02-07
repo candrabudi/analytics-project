@@ -25,12 +25,13 @@ class KOLController extends Controller
         $page = $request->input('page', 1);
         $perPage = $request->input('perPage', 10);
         $search = $request->input('search', '');
-        $tier = $request->input('tier', []); // Ambil filter kategori
+        $tier = $request->input('categories', []); // Ambil filter kategori
         $categories = $tier ? explode(',', $tier) : [];
+
         $kols = RawTiktokAccount::when($search, function ($query) use ($search) {
-                $query->where('nickname', 'LIKE', "%$search%")
-                    ->orWhere('unique_id', 'LIKE', "%$search%");
-            })
+            $query->where('nickname', 'LIKE', "%$search%")
+                ->orWhere('unique_id', 'LIKE', "%$search%");
+        })
             ->when(!empty($categories) && !in_array('all', $categories), function ($query) use ($categories) {
                 // Filter berdasarkan kategori yang dipilih
                 $query->whereHas('assignCategory', function ($categoryQuery) use ($categories) {
@@ -40,17 +41,20 @@ class KOLController extends Controller
             ->with('assignCategory')
             ->orderBy('created_at', 'DESC')
             ->paginate($perPage, ['*'], 'page', $page);
-    
+
+        // Transform collection to add file URL for front-end
         $kols->getCollection()->transform(function ($kol) {
             $kol->file_url = $kol->file ? url('storage/files/' . $kol->file) : null;
             return $kol;
         });
-    
+
+        // Return response in JSON format
         return response()->json($kols);
     }
-    
-    
-    
+
+
+
+
 
     public function typeInfluencer()
     {
@@ -65,7 +69,7 @@ class KOLController extends Controller
         $selectedCategories = $rawTiktokAccount->categories->pluck('id')->toArray();
         return view('kol.type_influencer.edit', compact('rawTiktokAccount', 'selectedCategories', 'categories'));
     }
-    
+
     public function updateDatabaseRaw(Request $request, $id)
     {
         $rawTiktokAccount = RawTiktokAccount::findOrFail($id);
@@ -103,9 +107,9 @@ class KOLController extends Controller
             'x-rapidapi-host' => 'tiktok-download-video1.p.rapidapi.com',
             'x-rapidapi-key' => $setting->rapid_api_key,
         ])->get('https://tiktok-download-video1.p.rapidapi.com/userInfo', [
-            'unique_id' => '@'.$request->unique_id,
-        ]);
-        
+                    'unique_id' => '@' . $request->unique_id,
+                ]);
+
         if ($response->successful()) {
             $data = $response->json();
             // return $data;
@@ -115,15 +119,15 @@ class KOLController extends Controller
             $check = RawTiktokAccount::where('author_id', $user['id'])
                 ->first();
 
-            if(!$check) {
+            if (!$check) {
                 $videoResponse = Http::withHeaders([
                     'x-rapidapi-host' => 'tiktok-download-video1.p.rapidapi.com',
                     'x-rapidapi-key' => 'fd95897d1fmsh16cd082ff4db73ep145e8fjsn5adfe90752d1',
                 ])->get('https://tiktok-download-video1.p.rapidapi.com/userPublishVideo', [
-                    'unique_id' => '@'.$request->unique_id,
-                    'count' => 12,
-                    'cursor' => 0
-                ]);
+                            'unique_id' => '@' . $request->unique_id,
+                            'count' => 12,
+                            'cursor' => 0
+                        ]);
 
                 $totalPlayCount = 0;
                 $totalDigg = 0;
@@ -164,9 +168,9 @@ class KOLController extends Controller
                 $store->save();
                 $store->fresh();
 
-                $checkCategory = TiktokCategory::where('name', 'LIKE', '%'.$category.'%')
+                $checkCategory = TiktokCategory::where('name', 'LIKE', '%' . $category . '%')
                     ->first();
-                if($checkCategory) {
+                if ($checkCategory) {
                     $assignCategory = new AssignTiktokCategory();
                     $assignCategory->raw_tiktok_account_id = $store->id;
                     $assignCategory->tiktok_category_id = $checkCategory->id;

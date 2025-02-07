@@ -112,10 +112,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/kol/management', [KolManagementController::class, 'index'])->name('kol.management.index');
     Route::get('/kol/management/edit/{a}', [KolManagementController::class, 'edit'])->name('kol.management.edit');
-    Route::post('/kol/management/approve', [KolManagementController::class, 'approve'])->name('kol.management.approve');
-    Route::post('/kol/management/reject', [KolManagementController::class, 'reject'])->name('kol.management.reject');
+    Route::post('/kol/management/approve/{a}', [KolManagementController::class, 'approve'])->name('kol.management.approve');
+    Route::post('/kol/management/reject/{a}', [KolManagementController::class, 'reject'])->name('kol.management.reject');
     Route::get('/kol/management/list', [KolManagementController::class, 'list'])->name('kol.management.list');
     Route::post('/kol/management/store', [KolManagementController::class, 'store'])->name('kol.management.store');
+    Route::post('/kol/management/create-invoice', [KolManagementController::class, 'storeTiktokInvoice'])->name('kol.management.store.invoice');
+    Route::post('/kol/management/create-shipment', [KolManagementController::class, 'storeKolShipment'])->name('kol.management.store.shipment');
     Route::post('/kol/master/update-field', [KolController::class, 'updateField'])->name('kol.updateField');
 
 
