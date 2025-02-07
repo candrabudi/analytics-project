@@ -16,6 +16,8 @@ class TiktokInvoice extends Model
         'account_number',
         'file_upload',
         'amount',
+        'status',
+        'type'
     ];
 
     public function rawTiktokAccount()

@@ -152,7 +152,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('kol/invoices', [KolInvoiceController::class, 'store'])->name('kol_invoices.store');
     Route::get('kol/invoices/edit/{id}', [KolInvoiceController::class, 'edit'])->name('kol_invoices.edit');
     Route::put('kol/invoices/update/{id}', [KolInvoiceController::class, 'update'])->name('kol_invoices.update');
-    Route::post('kol/invoices/destroy/{id}', [KolInvoiceController::class, 'destroy'])->name('kol_invoices.destroy');
+    Route::delete('kol/invoices/destroy/{id}', [KolInvoiceController::class, 'destroy'])->name('kol_invoices.destroy');
 
 
     Route::get('kol/progress/posts', [TiktokPostController::class, 'index'])->name('kol_progress_posts.index');

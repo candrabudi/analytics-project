@@ -7,9 +7,23 @@ use App\Models\Bank;
 use App\Models\KolManagement;
 use App\Models\TiktokInvoice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class KolInvoiceController extends Controller
 {
+    // public function index()
+    // {
+    //     $kolManagements = KolManagement::leftJoin('tiktok_invoices', 'kol_management.id', '=', 'tiktok_invoices.kol_management_id')
+    //         ->whereNull('tiktok_invoices.kol_management_id')
+    //         ->select('kol_management.*')
+    //         ->with('rawTiktokAccount')
+    //         ->get();
+
+    //     $kolManagementsEdit = KolManagement::all();
+    //     $banks = Bank::all();
+    //     return view('kol.invoice.index', compact('kolManagements', 'kolManagementsEdit', 'banks'));
+    // }
+
     public function index()
     {
         $kolManagements = KolManagement::leftJoin('tiktok_invoices', 'kol_management.id', '=', 'tiktok_invoices.kol_management_id')
@@ -20,7 +34,12 @@ class KolInvoiceController extends Controller
 
         $kolManagementsEdit = KolManagement::all();
         $banks = Bank::all();
-        return view('kol.invoice.index', compact('kolManagements', 'kolManagementsEdit', 'banks'));
+
+        $tiktokInvoices = TiktokInvoice::with(['rawTiktokAccount', 'kolManagement', 'bank'])
+            ->paginate(10);
+
+        // return $tiktokInvoices;
+        return view('kol.invoice.index', compact('kolManagements', 'kolManagementsEdit', 'banks', 'tiktokInvoices'));
     }
 
     public function load(Request $request)
@@ -32,8 +51,8 @@ class KolInvoiceController extends Controller
         $landingpages = TiktokInvoice::when($search, function ($query) use ($search) {
             $query->where('name', 'LIKE', "%$search%");
         })
-        ->with(['rawTiktokAccount', 'kolManagement', 'bank'])
-        ->paginate($perPage, ['*'], 'page', $page);
+            ->with(['rawTiktokAccount', 'kolManagement', 'bank'])
+            ->paginate($perPage, ['*'], 'page', $page);
 
         return response()->json($landingpages);
     }
@@ -90,43 +109,88 @@ class KolInvoiceController extends Controller
         return $tiktokInvoice;
     }
 
+    // public function update(Request $request, $id)
+    // {
+    //     $validated = $request->validate([
+    //         'bank_id' => 'required|exists:banks,id',
+    //         'account_name' => 'required|string|max:255',
+    //         'account_number' => 'required|numeric',
+    //         'file_upload' => 'nullable|file|mimes:jpg,png,pdf|max:2048'
+    //     ]);
+
+    //     $tiktokInvoice = TiktokInvoice::findOrFail($id);
+
+    //     if ($request->hasFile('file_upload')) {
+    //         $file = $request->file('file_upload');
+    //         $filePath = $file->store('uploads/invoices', 'public'); 
+    //         $validated['file_upload'] = $filePath;
+    //     }
+
+    //     $tiktokInvoice->update($validated);
+
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'code' => 200,
+    //         'message' => 'Success update data'
+    //     ]);
+    // }
+
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
             'bank_id' => 'required|exists:banks,id',
             'account_name' => 'required|string|max:255',
             'account_number' => 'required|numeric',
+            'status' => 'required|in:pending,process,paid,rejected',
             'file_upload' => 'nullable|file|mimes:jpg,png,pdf|max:2048'
         ]);
-
+    
         $tiktokInvoice = TiktokInvoice::findOrFail($id);
-
+    
         if ($request->hasFile('file_upload')) {
+            if ($tiktokInvoice->file_upload && Storage::disk('public')->exists($tiktokInvoice->file_upload)) {
+                Storage::disk('public')->delete($tiktokInvoice->file_upload);
+            }
             $file = $request->file('file_upload');
-            $filePath = $file->store('uploads/invoices', 'public'); 
+            $filePath = $file->store('uploads/invoices', 'public');
             $validated['file_upload'] = $filePath;
         }
-
+    
         $tiktokInvoice->update($validated);
-
-        return response()->json([
-            'status' => 'success',
-            'code' => 200,
-            'message' => 'Success update data'
-        ]);
+        
+        return redirect()->back()->with('success', 'TikTok Invoice successfully updated!');
     }
+    
 
+
+
+    // public function destroy($id)
+    // {
+    //     $warehouse = TiktokInvoice::findOrFail($id);
+    //     $warehouse->delete();
+
+    //     return response()
+    //         ->json([
+    //             'status' => 'success',
+    //             'code' => 200,
+    //             'message' => 'Success delete warehouse'
+    //         ]);
+    // }
 
     public function destroy($id)
     {
-        $warehouse = TiktokInvoice::findOrFail($id);
-        $warehouse->delete();
+        $tiktokInvoice = TiktokInvoice::findOrFail($id);
 
-        return response()
-            ->json([
-                'status' => 'success', 
-                'code' => 200, 
-                'message' => 'Success delete warehouse'
-            ]);
+        // Delete the file if it exists
+        if ($tiktokInvoice->file_upload && Storage::disk('public')->exists($tiktokInvoice->file_upload)) {
+            Storage::disk('public')->delete($tiktokInvoice->file_upload);
+        }
+
+        // Delete the TikTok invoice
+        $tiktokInvoice->delete();
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'TikTok Invoice successfully deleted!');
     }
+
 }
